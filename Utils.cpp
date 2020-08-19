@@ -12,23 +12,3 @@ bool Utils::isBigEndian() {
 
     return ptr[0] == 0;
 }
-
-uint32_t Utils::swap32(const uint32_t &x) {
-    uint32_t ret;
-
-    ret = x >> 24u;
-    ret |= (x >> 8u) & 0xFF00u;
-    ret |= (x << 8u) & 0xFF0000u;
-    ret |= (x << 24u) & 0xFF000000u;
-
-    return ret;
-}
-
-uint16_t Utils::swap16(const uint16_t &x) {
-    uint16_t ret;
-
-    ret = x >> 8u;
-    ret |= (uint16_t)(x << 8u) & 0xFF00u;
-
-    return ret;
-}

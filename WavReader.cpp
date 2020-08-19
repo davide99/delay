@@ -1,5 +1,6 @@
 #include "WavReader.h"
 #include "Utils.h"
+#include "Math/Integers.h"
 #include "Consts.h"
 #include <iostream>
 #include <fstream>
@@ -98,7 +99,7 @@ WavReader::WavReader(const std::string &fileName) {
         wavFile.read(reinterpret_cast<char *>(&chunk), sizeof(GenericChunk));
 
         if (isBigEndian)
-            chunk.size = Utils::swap32(chunk.size);
+            chunk.size = Math::Integers::little2Big(chunk.size);
 
         if (isFmtChunk(chunk))
             break;
@@ -119,7 +120,7 @@ WavReader::WavReader(const std::string &fileName) {
         wavFile.read(reinterpret_cast<char *>(&chunk), sizeof(GenericChunk));
 
         if (isBigEndian)
-            chunk.size = Utils::swap32(chunk.size);
+            chunk.size = Math::Integers::little2Big(chunk.size);
 
         if (isDataChunk(chunk))
             break;
@@ -131,25 +132,9 @@ WavReader::WavReader(const std::string &fileName) {
     std::memcpy(&dataChunk, &chunk, sizeof(GenericChunk));
 
     size_t numberOfSamples = (dataChunk.size << 3u) / (fmtChunk.channels * fmtChunk.bitsPerSample);
-    this->data.reserve(numberOfSamples);
 
-    uint16_t sample;
-
-    for (size_t i = 0; i < numberOfSamples; i++) {
-        wavFile.read(reinterpret_cast<char *>(&sample), 2);
-        sample = Utils::swap16(sample);
-        this->data.push_back(static_cast<int16_t>(sample));
-    }
-
-
-
-    /*this->data.reserve(numberOfSamples);
-
-    this->data.insert(this->data.begin(),
-                      std::istream_iterator<uint16_t>(wavFile),
-                      std::istream_iterator<uint16_t>());*/
-
-
+    this->data.resize(numberOfSamples);
+    wavFile.read(reinterpret_cast<char*>(this->data.data()), numberOfSamples * fmtChunk.bitsPerSample >> 3u);
 
     wavFile.close();
 }
