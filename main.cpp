@@ -1,5 +1,5 @@
 #include <iostream>
-#include "WavReader.h"
+#include "IO/WavReader.h"
 
 int main() {
     WavReader wavReader("../out.wav");

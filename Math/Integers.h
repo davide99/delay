@@ -8,7 +8,7 @@ namespace Math::Integers {
 
     uint16_t little2Big(const uint16_t &x);
 
-    int16_t reinterpret2Signed(const uint16_t &x);
+    int16_t little2Big(const int16_t &x);
 }
 
 #endif
