@@ -136,3 +136,7 @@ IO::WavReader::WavReader(const std::string &fileName) {
 const std::vector<int16_t> &IO::WavReader::getData() {
     return this->data;
 }
+
+const std::string &IO::WavReader::getFileName() const {
+    return this->fileName;
+}

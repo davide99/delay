@@ -11,6 +11,11 @@ namespace IO {
     class WavReader {
 
     private:
+        std::string fileName;
+    public:
+        [[nodiscard]] const std::string &getFileName() const;
+
+    private:
         std::vector<int16_t> data;
     public:
         explicit WavReader(const std::string &fileName);
