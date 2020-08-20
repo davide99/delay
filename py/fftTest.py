@@ -5,11 +5,11 @@ import numpy as np
 def main():
     fft_ = []
 
-    with open("fft.txt") as f:
+    with open("../fft.txt") as f:
         for line in f:
             fft_.append(float(line))
 
-    _, data = read("out.wav")
+    _, data = read("../out.wav")
 
     data = data[:512]
     hamming = np.hanning(512)
