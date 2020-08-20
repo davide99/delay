@@ -8,7 +8,7 @@ int main() {
     Math::Spectrogram spectrogram(wavReader.getData());
     std::ofstream file("fft.txt");
 
-    for (auto &value:spectrogram[0].getData())
+    for (auto &value:spectrogram[0].data)
         file << std::abs(value) << std::endl;
 
     file.close();

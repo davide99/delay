@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <complex>
+#include <list>
 #include "../Consts.h"
 
 namespace Math {
@@ -30,7 +31,7 @@ namespace Math {
         explicit Spectrogram(const std::vector<float>& data);
 
     private:
-        std::vector<FFTWindow> fftWindows;
+        std::list<FFTWindow> fftWindows;
     public:
         FFTWindow operator[](size_t pos) const;
     };
