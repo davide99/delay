@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cstdint>
 #include <cstring>
-#include <iterator>
+#include <algorithm>
 
 /*
  * http://soundfile.sapp.org/doc/WaveFormat/
@@ -50,7 +50,7 @@ static bool checkFmtChunk(const FmtChunk &fmtChunk) {
 }
 
 bool IO::WavReader::findChunk(const uint8_t *id, Chunk &chunk, std::ifstream &wavFile, const bool &isBigEndian,
-                          const bool iterate = true) {
+                              const bool iterate = true) {
     bool found;
 
     do {
@@ -123,17 +123,23 @@ IO::WavReader::WavReader(const std::string &fileName) {
         numberOfSamples = (chunk.size << 3u) / (Consts::Channels * Consts::BitsPerSample);
     }
 
+    int16_t iData[numberOfSamples];
     this->data.resize(numberOfSamples);
-    wavFile.read(reinterpret_cast<char *>(this->data.data()), numberOfSamples * Consts::BitsPerSample >> 3u);
+
+    wavFile.read(reinterpret_cast<char *>(iData), numberOfSamples * Consts::BitsPerSample >> 3u);
 
     if (isBigEndian)
-        for (auto &sample : this->data)
+        for (auto &sample : iData)
             sample = Math::Integers::little2Big(sample);
+
+    std::transform(iData, iData + numberOfSamples, this->data.data(), [](int16_t i) -> float {
+        return i;
+    });
 
     wavFile.close();
 }
 
-const std::vector<int16_t> &IO::WavReader::getData() {
+const std::vector<float> &IO::WavReader::getData() {
     return this->data;
 }
 

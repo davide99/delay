@@ -1,23 +1,17 @@
 #include <iostream>
 #include "IO/WavReader.h"
-#include "Structures/MaxFixedHeap.h"
-#include <functional>
-
-using namespace Structures;
+#include "Math/Spectrogram.h"
+#include <fstream>
 
 int main() {
-    //IO::WavReader wavReader("../out.wav");
+    IO::WavReader wavReader("../out.wav");
+    Math::Spectrogram spectrogram(wavReader.getData());
+    std::ofstream file("fft.txt");
 
-    //for (auto const &value : wavReader.getData())
-    //    std::cout << value << "\n";
+    for (auto &value:spectrogram[0].getData())
+        file << std::abs(value) << std::endl;
 
-    MaxFixedHeap<float> fixedSizeHeap(4);
-
-    for (int i = 0; i < 6; i++)
-        fixedSizeHeap.push(i);
-
-    for (auto &value:fixedSizeHeap)
-        std::cout << value << std::endl;
+    file.close();
 
     return 0;
 }
