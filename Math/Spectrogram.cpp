@@ -8,7 +8,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float>& data) {
 
     //Calculation of the winFFT size
     size_t winFFTsize = ((size_t) ((data.size() - Consts::WinSize) / stepSize)) * stepSize;
-    this->fftWindows.resize(winFFTsize);
+    this->fftWindows.reserve(winFFTsize);
 
     FFTWindow fftWindow;
     float timeWindow[Consts::WinSize];

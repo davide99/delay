@@ -5,7 +5,7 @@
 float *Math::Window::get() {
     if (!Math::Window::winInitialized)
         for (std::remove_const_t<decltype(Consts::WinSize)> i = 0; i < Consts::WinSize; i++)
-            window[i] = (float) (0.5f * (1 - std::cos(2 * M_PI * i / (Consts::WinSize - 1))));
+            window[i] = (float) (0.5f * (1 - std::cos(2 * M_PI * i / (Consts::WinSize - 1)))); //Hanning
 
     return Math::Window::window;
 }

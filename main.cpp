@@ -6,12 +6,14 @@
 int main() {
     IO::WavReader wavReader("../out.wav");
     Math::Spectrogram spectrogram(wavReader.getData());
-    std::ofstream file("fft.txt");
+    std::ofstream file("../fft.txt");
 
-    for (auto &value:spectrogram[0].data)
+    for (auto &value:spectrogram[0].getData())
         file << std::abs(value) << std::endl;
 
     file.close();
+
+    std::cout<<spectrogram[1].getTime();
 
     return 0;
 }

@@ -31,7 +31,7 @@ namespace Math {
         explicit Spectrogram(const std::vector<float>& data);
 
     private:
-        std::list<FFTWindow> fftWindows;
+        std::vector<FFTWindow> fftWindows;
     public:
         FFTWindow operator[](size_t pos) const;
     };
