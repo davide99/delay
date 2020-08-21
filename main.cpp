@@ -37,7 +37,7 @@ void mic(){
 
 int main() {
     original();
-    mic();
+    //mic();
 
     return 0;
 }

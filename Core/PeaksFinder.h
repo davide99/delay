@@ -2,13 +2,14 @@
 #define CORE_PEAKSFINDER_H
 
 #include "../Math/FFTWindow.h"
-#include "../MaxFixedHeap.h"
 #include "Peak.h"
 #include <vector>
+#include <cstdint>
 
 namespace Core {
     std::vector<Core::Peak>
-    findPeaks(const Math::FFTWindow &fftWindow, uint8_t bandStart, uint8_t bandEnd, size_t window);
+    findPeaks(const Math::FFTWindow &fftWindow, std::uint_fast8_t bandStart, std::uint_fast8_t bandEnd,
+              std::size_t window);
 }
 
 #endif

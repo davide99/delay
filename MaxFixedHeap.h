@@ -7,8 +7,16 @@
 
 template<typename T, typename Compare = std::less<T>>
 class MaxFixedHeap {
+protected:
+    std::vector<T> c;
+    size_t maxSize;
+    Compare cmp;
+
 public:
-    explicit MaxFixedHeap(size_t max_size) : maxSize(max_size) {}
+    explicit MaxFixedHeap(size_t maxSize) {
+        this->maxSize = maxSize;
+        this->c.reserve(maxSize);
+    }
 
     typename std::vector<T>::iterator begin() {
         return this->c.begin();
@@ -47,7 +55,7 @@ public:
         c.clear();
     }
 
-    std::vector<T> data(){
+    std::vector<T> data() {
         return c;
     }
 
@@ -58,11 +66,6 @@ public:
     [[nodiscard]] inline size_t size() const {
         return c.size();
     }
-
-protected:
-    std::vector<T> c;
-    size_t maxSize;
-    Compare cmp;
 };
 
 

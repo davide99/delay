@@ -2,9 +2,6 @@
 #define MATH_SPECTROGRAM_H
 
 #include <vector>
-#include <array>
-#include <complex>
-#include <list>
 #include "../Consts.h"
 #include "FFTWindow.h"
 

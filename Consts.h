@@ -22,8 +22,8 @@ namespace Consts {
     constexpr std::uint16_t MinFreq = 100u;
     constexpr std::uint16_t MaxFreq = 2000u;
 
-    constexpr float minWinDistance = 1.0f;
-    constexpr float maxWinDistance = 3.0f;
+    constexpr float MinWinDistanceF = 1.0f;
+    constexpr float MaxWinDistanceF = 3.0f;
 }
 
 #endif

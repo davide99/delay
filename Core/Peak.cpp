@@ -29,5 +29,3 @@ bool Core::Peak::operator<(const Peak &peak) const {
 const float &Core::Peak::getTime() const {
     return this->time;
 }
-
-

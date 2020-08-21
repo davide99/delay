@@ -4,7 +4,7 @@
 #include <cstdint>
 
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
-    std::uint8_t currBand, nextBand;
+    std::uint_fast8_t currBand, nextBand;
     std::vector<Peak> peakVec;
     MaxFixedHeap<Peak> tmp(Consts::NPeaks);
 
@@ -21,9 +21,6 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
                 peakVec.insert(peakVec.end(), tmp.begin(), tmp.end());
                 tmp.clear();
             }
-
-            //Get the current window
-            Math::FFTWindow fftWindow = spectrogram[i];
 
             //Extract between band
             std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], currBand, nextBand - 1, i);
