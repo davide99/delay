@@ -9,23 +9,23 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, uint8_t bandStart, uint8_t ban
 
     for (uint8_t i = bandStart; i < bandEnd; i++) {
         //Get the current peak value
-        pi = std::abs(fftWindow.getData()[i]);
+        pi = std::abs(fftWindow.getMagnitudes()[i]);
         pl = pr = -1;
 
         //Extract respectively 5 complex element after and before i
         //Are there 5 element before and after actually?
         if (i - Consts::PeakRange >= bandStart)
             std::max_element(
-                    fftWindow.getData().begin() + i - Consts::PeakRange,
-                    fftWindow.getData().begin() + i - 1,
+                    fftWindow.getMagnitudes().begin() + i - Consts::PeakRange,
+                    fftWindow.getMagnitudes().begin() + i - 1,
                     [](std::complex<float> const &l, std::complex<float> const &r) -> bool {
                         return std::abs(l) < std::abs(r);
                     });
 
         if (i + Consts::PeakRange + 1 <= bandEnd)
             std::max_element(
-                    fftWindow.getData().begin() + i + 1,
-                    fftWindow.getData().begin() + i + Consts::PeakRange + 1,
+                    fftWindow.getMagnitudes().begin() + i + 1,
+                    fftWindow.getMagnitudes().begin() + i + Consts::PeakRange + 1,
                     [](std::complex<float> const &l, std::complex<float> const &r) -> bool {
                         return std::abs(l) < std::abs(r);
                     });

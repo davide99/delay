@@ -11,12 +11,12 @@ namespace Math {
         friend class Spectrogram;
 
     private:
-        std::array<std::complex<float>, Consts::FFTOutSize> data;
+        std::array<float, Consts::FFTOutSize> magnitudes;
         float time{};
 
     public:
-        [[nodiscard]] const std::array<std::complex<float>, Consts::FFTOutSize> &getData() const {
-            return data;
+        [[nodiscard]] const std::array<float, Consts::FFTOutSize> &getMagnitudes() const {
+            return magnitudes;
         }
 
         [[nodiscard]] const float &getTime() const {

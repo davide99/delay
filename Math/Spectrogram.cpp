@@ -12,15 +12,22 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
 
     FFTWindow fftWindow;
     float timeWindow[Consts::WinSize];
+    fftwf_complex fftOut[Consts::FFTOutSize];
 
-    fftwf_plan p = fftwf_plan_dft_r2c_1d(
-            Consts::WinSize, timeWindow,
-            reinterpret_cast<fftwf_complex *>(fftWindow.data.data()), FFTW_ESTIMATE);
+    fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::WinSize, timeWindow, fftOut, FFTW_ESTIMATE);
 
     for (size_t i = 0; i + Consts::WinSize < data.size(); i += stepSize) {
         //Multiply the sliding window by the hamming window
         Math::Vector::mul(Window::get(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);
+
+        //std::transform(iData, iData + numberOfSamples, this->data.data(), [](int16_t i) -> float {
+        //        return i;
+        //    });
+
+        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(), [](fftwf_complex i) -> float {
+            return std::hypot(i[0], i[1]);
+        });
 
         fftWindow.time = (float) i / Consts::SampleRate;
         this->fftWindows.push_back(fftWindow);
