@@ -21,10 +21,6 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
         Math::Vector::mul(Window::get(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);
 
-        //std::transform(iData, iData + numberOfSamples, this->data.data(), [](int16_t i) -> float {
-        //        return i;
-        //    });
-
         std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(), [](fftwf_complex i) -> float {
             return std::hypot(i[0], i[1]);
         });
