@@ -4,10 +4,8 @@
 #include "Window.h"
 
 Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
-    uint16_t stepSize = Consts::WinSize - Consts::Overlap;
-
     //Calculation of the winFFT size
-    size_t winFFTsize = ((size_t) ((data.size() - Consts::WinSize) / stepSize)) * stepSize;
+    size_t winFFTsize = ((size_t) ((data.size() - Consts::WinSize) / Consts::StepSize)) * Consts::StepSize;
     this->fftWindows.reserve(winFFTsize);
 
     FFTWindow fftWindow;
@@ -16,7 +14,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
 
     fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::WinSize, timeWindow, fftOut, FFTW_ESTIMATE);
 
-    for (size_t i = 0; i + Consts::WinSize < data.size(); i += stepSize) {
+    for (size_t i = 0; i + Consts::WinSize < data.size(); i += Consts::StepSize) {
         //Multiply the sliding window by the hamming window
         Math::Vector::mul(Window::get(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);

@@ -10,11 +10,17 @@ def main():
 
     sql = "INSERT INTO hashtable (id, hash, time) VALUES "
 
-    links = []
+    lines = []
 
     with open("../links.txt") as f:
         for line in f:
-            links.append(line.split(";"))
+            lines.append(line.strip())
+
+    lines = list(set(lines))
+
+    links = []
+    for line in lines:
+        links.append(line.split(";"))
 
     for link in links:
         sql += "(" + str(id) + "," + str(link[0]) + "," + str(link[1]) + "),"

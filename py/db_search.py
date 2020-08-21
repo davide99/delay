@@ -10,11 +10,17 @@ def main():
 
     sql = "INSERT INTO record (hash_r, start) VALUES "
 
-    links = []
+    lines = []
 
     with open("../links_mic.txt") as f:
         for line in f:
-            links.append(line.split(";"))
+            lines.append(line.strip())
+
+    lines = list(set(lines))
+
+    links = []
+    for line in lines:
+        links.append(line.split(";"))
 
     for link in links:
         sql += "(" + str(link[0]) + "," + str(link[1]) + "),"

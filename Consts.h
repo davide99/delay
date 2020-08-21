@@ -11,6 +11,7 @@ namespace Consts {
 
     constexpr uint16_t WinSize = 512u;
     constexpr uint16_t Overlap = 256u;
+    constexpr uint16_t StepSize = WinSize - Overlap;
     constexpr uint16_t FFTOutSize = WinSize / 2 + 1;
     constexpr uint16_t FreqBins = FFTOutSize;
 
@@ -20,6 +21,9 @@ namespace Consts {
     constexpr std::uint8_t PeakRange = 5u;
     constexpr std::uint16_t MinFreq = 100u;
     constexpr std::uint16_t MaxFreq = 2000u;
+
+    constexpr float minWinDistance = 1.0f;
+    constexpr float maxWinDistance = 3.0f;
 }
 
 #endif

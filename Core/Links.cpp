@@ -2,21 +2,20 @@
 #include <algorithm>
 
 Core::Links::Links(const std::vector<Peak> &peakVec) {
-    for (auto it = peakVec.begin(); it != peakVec.end() - 1; it++) {
+    float timeStep = (float) Consts::StepSize / Consts::SampleRate;
+    std::size_t windowDistance = Consts::maxWinDistance / timeStep;
+
+    for (auto it = peakVec.begin() + windowDistance; it != peakVec.end(); it++) {
         std::vector<Peak> tmpPeaks;
 
-        std::copy_if(it + 1, peakVec.end(),         //Sub vector from it+1 to the end
-                     std::back_inserter(tmpPeaks),
-                     [&it](const Peak &a) -> bool {
-                         float delta = a.getTime() - it->getTime();
-
-                         /*
-                          * Time difference must be between 1 and 3 and
-                          * the peaks should be in the same band
-                          */
-
-                         return (delta >= 1.0f) && (delta < 3.0f) && (a.compareBand(*it));
-                     });
+        std::copy_if(
+                (it - windowDistance >= peakVec.begin() ? it - windowDistance : peakVec.begin()),
+                it - 1,
+                std::back_inserter(tmpPeaks),
+                [&it](const Peak &a) -> bool {
+                    return ((a.getTime() - it->getTime()) >= Consts::minWinDistance) && (a.compareBand(*it));
+                    //return ((std::abs(a.getTime() - it->getTime())) >= Consts::minWinDistance) && (a.compareBand(*it));
+                });
 
         for (const auto &a:tmpPeaks)
             this->push_back(Link(*it, a));

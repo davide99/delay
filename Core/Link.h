@@ -26,11 +26,11 @@ namespace Core {
             this->time = address.getWindow();
         }
 
-        const std::size_t &getHash(){
+        [[nodiscard]] const std::size_t &getHash() const{
             return hash;
         }
 
-        const std::size_t &getTime(){
+        [[nodiscard]] const std::size_t &getTime() const{
             return time;
         }
 
