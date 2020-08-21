@@ -61,7 +61,7 @@ bool IO::WavReader::findChunk(const uint8_t *id, Chunk &chunk, std::ifstream &wa
         }
 
         if (isBigEndian)
-            chunk.size = Math::Integers::little2Big(chunk.size);
+            chunk.size = Math::Integers::BSwap(chunk.size);
 
         found = !std::memcmp(chunk.id, id, idSize);
 
@@ -132,7 +132,7 @@ IO::WavReader::WavReader(const std::string &fileName) {
 
     if (isBigEndian)
         for (auto &sample : iData)
-            sample = Math::Integers::little2Big(sample);
+            sample = Math::Integers::BSwap(sample);
 
     std::transform(iData, iData + numberOfSamples, this->data.data(), [](int16_t i) -> float {
         return i;
