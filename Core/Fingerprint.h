@@ -6,7 +6,7 @@
 #include "../Math/Spectrogram.h"
 
 namespace Core::Fingerprint {
-    std::vector<Core::Peak> compute(const Math::Spectrogram& spectrogram);
+    [[nodiscard]] std::vector<Core::Peak> compute(const Math::Spectrogram& spectrogram);
 }
 
 

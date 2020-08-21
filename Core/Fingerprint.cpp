@@ -26,7 +26,7 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
             Math::FFTWindow fftWindow = spectrogram[i];
 
             //Extract between band
-            std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], currBand, nextBand - 1);
+            std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], currBand, nextBand - 1, i);
             for (const auto &peak : foundPeaks)
                 tmp.push(peak);
         }

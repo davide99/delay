@@ -2,7 +2,8 @@
 #include "../Math/Window.h"
 #include <complex>
 
-std::vector<Core::Peak> Core::findPeaks(const Math::FFTWindow &fftWindow, uint8_t bandStart, uint8_t bandEnd) {
+std::vector<Core::Peak>
+Core::findPeaks(const Math::FFTWindow &fftWindow, uint8_t bandStart, uint8_t bandEnd, size_t window) {
     MaxFixedHeap<Peak> peaks(Consts::NPeaks);
     float pl, pi, pr;
 
@@ -33,7 +34,7 @@ std::vector<Core::Peak> Core::findPeaks(const Math::FFTWindow &fftWindow, uint8_
             float peakFreq = Math::Window::getFreqBins()[i];
 
             if ((peakFreq >= Consts::MinFreq) && (peakFreq <= Consts::MaxFreq))
-                peaks.push(Peak(i, pi, fftWindow.getTime()));
+                peaks.push(Peak(i, pi, window, fftWindow.getTime()));
         }
     }
 

@@ -81,6 +81,8 @@ IO::WavReader::WavReader(const std::string &fileName) {
     Chunk chunk{};
     bool isBigEndian;
 
+    this->fileName = fileName;
+
     if (!Utils::fileExists(fileName))
         throw std::runtime_error("Can't open file: " + fileName);
 

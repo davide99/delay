@@ -3,5 +3,5 @@ project(fin_cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(fin_cpp main.cpp IO/WavReader.cpp IO/WavReader.h Utils.cpp Utils.h Consts.h Math/Integers.cpp Math/Integers.h MaxFixedHeap.h Math/Window.cpp Math/Window.h Math/Vector.h Math/Spectrogram.cpp Math/Spectrogram.h Core/Fingerprint.cpp Core/Fingerprint.h Core/Peak.cpp Core/Peak.h Math/FFTWindow.h Core/PeaksFinder.cpp Core/PeaksFinder.h Core/Link.h)
+add_executable(fin_cpp main.cpp IO/WavReader.cpp IO/WavReader.h Utils.cpp Utils.h Consts.h Math/Integers.cpp Math/Integers.h MaxFixedHeap.h Math/Window.cpp Math/Window.h Math/Vector.h Math/Spectrogram.cpp Math/Spectrogram.h Core/Fingerprint.cpp Core/Fingerprint.h Core/Peak.cpp Core/Peak.h Math/FFTWindow.h Core/PeaksFinder.cpp Core/PeaksFinder.h Core/Link.h Core/Links.cpp Core/Links.h)
 target_link_libraries(fin_cpp fftw3f)
