@@ -2,6 +2,7 @@
 #define CONSTS_H
 
 #include <cstdint>
+#include <string>
 #include <array>
 
 namespace Consts {
@@ -24,6 +25,13 @@ namespace Consts {
 
     constexpr float MinWinDistanceF = 1.0f;
     constexpr float MaxWinDistanceF = 3.0f;
+
+    namespace DB {
+        const std::string Hostname = "localhost";
+        const std::string Username = "davide";
+        const std::string Password = "";
+        const std::string Name = "musiclibrary";
+    }
 }
 
 #endif

@@ -1,13 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <sstream>
 #include "IO/WavReader.h"
 #include "Math/Spectrogram.h"
 #include "Core/Fingerprint.h"
 #include "Core/Peak.h"
 #include "Core/Links.h"
 
-void original(){
+void original() {
     IO::WavReader wavReader("../out.wav");
     Math::Spectrogram spectrogram(wavReader.getData());
     std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
@@ -21,7 +22,7 @@ void original(){
     o.close();
 }
 
-void mic(){
+void mic() {
     IO::WavReader wavReader("../mic.wav");
     Math::Spectrogram spectrogram(wavReader.getData());
     std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
@@ -36,8 +37,15 @@ void mic(){
 }
 
 int main() {
-    original();
+    //original();
     //mic();
+
+    std::stringstream s;
+    s << "proca";
+    s.seekp(-1, std::ios_base::end);
+    s << "b";
+
+    std::cout << s.str();
 
     return 0;
 }
