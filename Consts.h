@@ -28,9 +28,20 @@ namespace Consts {
 
     namespace DB {
         const std::string Hostname = "localhost";
-        const std::string Username = "davide";
-        const std::string Password = "";
+        const std::string Username = "root";
+        const std::string Password = "davide";
         const std::string Name = "musiclibrary";
+
+        //Table names
+        const std::string RecordingsTable = Name + ".recordings";
+        const std::string InfoTable = Name + ".musicinfo";
+        const std::string TmpRecordTable = Name + "._recordings";
+
+        //Table fields
+        const std::string UInt64 = "BIGINT UNSIGNED";
+        const std::string UInt = "INT UNSIGNED";
+
+        constexpr std::uint64_t MinHint = 15;
     }
 }
 

@@ -1,51 +1,31 @@
-#include <iostream>
-#include <fstream>
 #include <vector>
-#include <sstream>
 #include "IO/WavReader.h"
 #include "Math/Spectrogram.h"
 #include "Core/Fingerprint.h"
 #include "Core/Peak.h"
 #include "Core/Links.h"
+#include "IO/DB.h"
 
-void original() {
+int main() {
     IO::WavReader wavReader("../out.wav");
     Math::Spectrogram spectrogram(wavReader.getData());
     std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
     Core::Links links = Core::Links(peaks);
 
-    std::ofstream o("../links.txt");
+    IO::DB db;
+    db.drop();
+    db.create();
+    db.insertSong(wavReader.getFileName(), links);
 
-    for (Core::Link link: links)
-        o << link.getHash() << ";" << link.getTime() << std::endl;
+    IO::WavReader wavMic("../mic.wav");
+    Math::Spectrogram specMic(wavMic.getData());
+    std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);
+    Core::Links linksMic = Core::Links(peaksMic);
 
-    o.close();
-}
+    std::uint64_t id;
+    db.searchIdGivenLinks(id, linksMic);
 
-void mic() {
-    IO::WavReader wavReader("../mic.wav");
-    Math::Spectrogram spectrogram(wavReader.getData());
-    std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
-    Core::Links links = Core::Links(peaks);
-
-    std::ofstream o("../links_mic.txt");
-
-    for (Core::Link link: links)
-        o << link.getHash() << ";" << link.getTime() << std::endl;
-
-    o.close();
-}
-
-int main() {
-    //original();
-    //mic();
-
-    std::stringstream s;
-    s << "proca";
-    s.seekp(-1, std::ios_base::end);
-    s << "b";
-
-    std::cout << s.str();
+    std::cout << id;
 
     return 0;
 }

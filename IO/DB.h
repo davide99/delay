@@ -15,7 +15,15 @@ namespace IO {
     public:
         DB();
 
+        ~DB();
+
+        bool create();
+
+        bool drop();
+
         bool insertSong(const std::string &name, const Core::Links &links);
+
+        bool searchIdGivenLinks(std::uint64_t &id, const Core::Links &links);
 
         std::string getSongNameById(const std::uint64_t &id);
     };
