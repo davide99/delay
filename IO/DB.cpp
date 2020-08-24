@@ -1,6 +1,6 @@
 #include "DB.h"
 #include <mariadb++/account.hpp>
-#include <sstream>
+#include <string>
 
 IO::DB::DB() {
     //Setup the account
@@ -65,17 +65,22 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     }
 
     //Insert Links
-    std::stringstream ss;
-    ss << "INSERT IGNORE INTO " << Consts::DB::RecordingsTable << " (hash, songId, time) VALUES ";
+    std::string s = "INSERT IGNORE INTO " + Consts::DB::RecordingsTable + " (hash, songId, time) VALUES ";
 
-    for (const auto &link : links)
-        ss << "(" << link.getHash() << "," << id << "," << link.getTime() << "),";
+    for (const auto &link : links) {
+        s += "(";
+        s += std::to_string(link.getHash());
+        s += ",";
+        s += std::to_string(id);
+        s += ",";
+        s += std::to_string(link.getTime());
+        s += "),";
+    }
 
-    ss.seekp(-1, std::ios_base::end);
-    ss << ";";
+    s.pop_back(); //Remove last (useless) ","
 
     try {
-        conn->insert(ss.str());
+        conn->insert(s);
     } catch (const std::exception &e) {
         return false;
     }
@@ -112,17 +117,20 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
     }
 
     //Insert recording links in the temporary table
-    std::stringstream ss;
-    ss << "INSERT INTO " << Consts::DB::TmpRecordTable << " VALUES ";
+    std::string s = "INSERT INTO " + Consts::DB::TmpRecordTable + " VALUES ";
 
-    for (const auto &link : links)
-        ss << "(" << link.getHash() << "," << link.getTime() << "),";
+    for (const auto &link : links) {
+        s += "(";
+        s += std::to_string(link.getHash());
+        s += ",";
+        s += std::to_string(link.getTime());
+        s += "),";
+    }
 
-    ss.seekp(-1, std::ios_base::end);
-    ss << ";";
+    s.pop_back(); //Remove last (useless) ","
 
     try {
-        conn->insert(ss.str());
+        conn->insert(s);
     } catch (const std::exception &e) {
         return false;
     }
