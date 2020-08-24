@@ -33,7 +33,7 @@ bool IO::DB::create() {
                             "hash " + Consts::DB::UInt64 + " NOT NULL, " +
                             "songId " + Consts::DB::UInt + " NOT NULL, " +
                             "time " + Consts::DB::UInt64 + " NOT NULL, " +
-                            "PRIMARY KEY (hash, songId), " +
+                            "PRIMARY KEY (hash, songId, time), " +
                             "FOREIGN KEY (songId) REFERENCES " + Consts::DB::InfoTable + "(id)" +
                             ")");
     } catch (const std::exception &e) {
@@ -65,7 +65,7 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     }
 
     //Insert Links
-    std::string s = "INSERT IGNORE INTO " + Consts::DB::RecordingsTable + " (hash, songId, time) VALUES ";
+    std::string s = "INSERT INTO " + Consts::DB::RecordingsTable + " (hash, songId, time) VALUES ";
 
     for (const auto &link : links) {
         s += "(";
