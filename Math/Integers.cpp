@@ -69,7 +69,7 @@ std::string Math::Integers::ToString(std::uint64_t x) {
     auto nextIt = s.end() - 1;
 
     while (x >= 100) {
-        auto const i = (x % 100) * 2;
+        auto const i = (x % 100) << 1u;
         x /= 100;
         *nextIt = digits[i + 1];
         nextIt--;
@@ -81,7 +81,7 @@ std::string Math::Integers::ToString(std::uint64_t x) {
     if (x < 10) {
         *nextIt = '0' + static_cast<std::uint32_t>(x);
     } else {
-        auto i = static_cast<std::uint32_t>(x) * 2;
+        auto i = static_cast<std::uint32_t>(x) << 1u;
         *nextIt = digits[i + 1];
         nextIt--;
         *nextIt = digits[i];
