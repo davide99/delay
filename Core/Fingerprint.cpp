@@ -4,7 +4,7 @@
 #include <cstdint>
 
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
-    std::uint_fast8_t currBand, nextBand;
+    int currBand, nextBand;
     std::vector<Peak> peakVec;
     MaxFixedHeap<Peak> tmp(Consts::NPeaks);
 
@@ -23,7 +23,7 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
             }
 
             //Extract between band
-            std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], currBand, nextBand - 1, i);
+            std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], i, currBand, nextBand - 1);
             for (const auto &peak : foundPeaks)
                 tmp.push(peak);
         }

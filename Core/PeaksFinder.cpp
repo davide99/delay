@@ -3,13 +3,13 @@
 #include "../MaxFixedHeap.h"
 
 std::vector<Core::Peak>
-Core::findPeaks(const Math::FFTWindow &fftWindow, std::uint_fast8_t bandStart, std::uint_fast8_t bandEnd,
-                std::size_t window) {
+Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd) {
+
     MaxFixedHeap<Peak> peaks(Consts::NPeaks);
     float pNeighbour, pCurrent;
-    decltype(bandStart) indexLeft, indexRight;
+    int indexLeft, indexRight;
 
-    for (std::uint_fast8_t i = bandStart; i < bandEnd; i++) {
+    for (int i = bandStart; i <= bandEnd; i++) {
         //Get the current peak value
         pCurrent = fftWindow.getMagnitudes()[i];
 

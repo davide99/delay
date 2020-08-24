@@ -1,5 +1,4 @@
 #include "DB.h"
-#include "../Consts.h"
 #include <mariadb++/account.hpp>
 #include <sstream>
 
@@ -136,11 +135,12 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
                 "SELECT " + Consts::DB::RecordingsTable + ".songId, COUNT(*) AS n " +
                 "FROM " + Consts::DB::RecordingsTable + " INNER JOIN " + Consts::DB::TmpRecordTable + " " +
                 "ON " + Consts::DB::RecordingsTable + ".hash=" + Consts::DB::TmpRecordTable + ".hash " +
+                "WHERE " + Consts::DB::RecordingsTable + ".time>=" + Consts::DB::TmpRecordTable + ".start " +
                 "GROUP BY " + Consts::DB::RecordingsTable + ".time-" + Consts::DB::TmpRecordTable + ".start, songId " +
                 "ORDER BY n DESC");
 
         if (result->next() && result->get_unsigned64(1) > Consts::DB::MinHint)
-            id = result->get_unsigned64(0);
+            id = result->get_unsigned32(0);
     } catch (const std::exception &e) {
         return false;
     }

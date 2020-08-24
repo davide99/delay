@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include "IO/WavReader.h"
 #include "Math/Spectrogram.h"
 #include "Core/Fingerprint.h"

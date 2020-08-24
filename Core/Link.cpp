@@ -22,7 +22,6 @@ Core::Link::Link(Peak address, Peak peak) {
     XXH3_64bits_update(&state, &addrFreq, sizeof(addrFreq));
 
     this->hash = XXH3_64bits_digest(&state);
-
     this->time = address.getWindow();
 }
 

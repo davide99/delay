@@ -8,8 +8,7 @@
 
 namespace Core {
     std::vector<Core::Peak>
-    findPeaks(const Math::FFTWindow &fftWindow, std::uint_fast8_t bandStart, std::uint_fast8_t bandEnd,
-              std::size_t window);
+    findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd);
 }
 
 #endif
