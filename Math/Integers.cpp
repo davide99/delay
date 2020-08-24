@@ -57,6 +57,7 @@ static inline std::uint32_t digits10(const std::uint64_t &x) {
     return 12u + digits10(x / P12);
 }
 
+//https://www.facebook.com/notes/facebook-engineering/three-optimization-tips-for-c/10151361643253920
 std::string Math::Integers::ToString(std::uint64_t x) {
     constexpr char digits[] = "0001020304050607080910111213141516171819"
                               "2021222324252627282930313233343536373839"
