@@ -14,7 +14,7 @@ namespace Math {
     private:
         std::vector<FFTWindow> fftWindows;
     public:
-        FFTWindow operator[](size_t pos) const;
+        FFTWindow operator[](std::size_t pos) const;
         [[nodiscard]] std::size_t size() const;
     };
 }

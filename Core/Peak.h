@@ -5,25 +5,25 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace Core{
+namespace Core {
     class Peak {
     private:
-        std::remove_const_t<decltype(Consts::FreqBins)> freqIndex;
+        int freqIndex;
         float power;
         std::size_t window;
         float time;
 
     public:
-        Peak(decltype(Consts::FreqBins) freqIndex, float power, std::size_t window, float time) :
+        Peak(const int &freqIndex, const float &power, const std::size_t &window, const float &time) :
                 freqIndex(freqIndex), power(power), window(window), time(time) {};
 
-        [[nodiscard]] const decltype(Consts::FreqBins) &getFreqIndex() const;
+        [[nodiscard]] const int &getFreqIndex() const;
 
         [[nodiscard]] const std::size_t &getWindow() const;
 
         [[nodiscard]] const float &getTime() const;
 
-        [[nodiscard]] bool compareBand(Peak peak) const;
+        [[nodiscard]] bool compareBand(const Peak &peak) const;
 
         bool operator<(const Peak &peak) const;
 

@@ -3,7 +3,7 @@
 #include "../Math/Integers.h"
 #include "../xxHash/xxh3.h"
 
-Core::Link::Link(Peak address, Peak peak) {
+Core::Link::Link(const Peak &address, const Peak &peak) {
     std::uint64_t deltaTime = peak.getWindow() - address.getWindow();
     std::uint64_t deltaFreq = peak.getFreqIndex() - address.getFreqIndex();
     std::uint64_t addrFreq = address.getFreqIndex();

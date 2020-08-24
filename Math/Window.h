@@ -7,13 +7,13 @@
 namespace Math::Window {
     namespace {
         bool winInitialized = false;
-        float window[Consts::WinSize];
+        std::array<float, Consts::WinSize> window;
 
         bool binsInitialized = false;
         std::array<float, Consts::FreqBins> freqBins;
     }
 
-    float *get();
+    const std::array<float, Consts::WinSize> &get();
 
     const std::array<float, Consts::FreqBins> &getFreqBins();
 }

@@ -5,7 +5,7 @@
 
 Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
     //Calculation of the winFFT size
-    size_t winFFTsize = ((size_t) ((data.size() - Consts::WinSize) / Consts::StepSize)) * Consts::StepSize;
+    std::size_t winFFTsize = ((std::size_t) ((data.size() - Consts::WinSize) / Consts::StepSize)) * Consts::StepSize;
     this->fftWindows.reserve(winFFTsize);
 
     FFTWindow fftWindow;
@@ -14,13 +14,13 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
 
     fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::WinSize, timeWindow, fftOut, FFTW_ESTIMATE);
 
-    for (size_t i = 0; i + Consts::WinSize < data.size(); i += Consts::StepSize) {
+    for (std::size_t i = 0; i + Consts::WinSize < data.size(); i += Consts::StepSize) {
         //Multiply the sliding window by the hamming window
-        Math::Vector::mul(Window::get(), data.data() + i, timeWindow, Consts::WinSize);
+        Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);
 
-        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(), [](fftwf_complex i) -> float {
-            return std::hypot(i[0], i[1]);
+        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(), [](const fftwf_complex i) -> float {
+            return std::sqrt(i[0] * i[0] + i[1] * i[1]);
         });
 
         fftWindow.time = (float) i / Consts::SampleRate;
@@ -30,7 +30,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
     fftwf_destroy_plan(p);
 }
 
-Math::FFTWindow Math::Spectrogram::operator[](size_t pos) const {
+Math::FFTWindow Math::Spectrogram::operator[](std::size_t pos) const {
     return this->fftWindows[pos];
 }
 

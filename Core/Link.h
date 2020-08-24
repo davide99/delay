@@ -10,7 +10,7 @@ namespace Core {
         std::uint64_t hash;
         std::size_t time;
     public:
-        Link(Peak address, Peak peak);
+        Link(const Peak &address, const Peak &peak);
 
         [[nodiscard]] const std::size_t &getHash() const;
 

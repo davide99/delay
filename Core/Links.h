@@ -8,7 +8,7 @@
 namespace Core {
     class Links : public std::vector<Link> {
     public:
-        explicit Links(const std::vector<Peak> &a);
+        explicit Links(const std::vector<Peak> &peakVec);
     };
 }
 
