@@ -141,6 +141,10 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
 
         if (result->next() && result->get_unsigned64(1) > Consts::DB::MinHint)
             id = result->get_unsigned32(0);
+
+#ifdef DEBUG
+        std::cout << ">>Number of common hashes: " << result->get_unsigned64(1) << std::endl;
+#endif
     } catch (const std::exception &e) {
         return false;
     }

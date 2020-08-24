@@ -41,7 +41,7 @@ namespace Consts {
         const std::string UInt64 = "BIGINT UNSIGNED";
         const std::string UInt = "INT UNSIGNED";
 
-        constexpr std::uint64_t MinHint = 5;
+        constexpr std::uint64_t MinHint = 15;
     }
 }
 
