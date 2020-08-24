@@ -1,6 +1,7 @@
 #include "DB.h"
 #include <mariadb++/account.hpp>
 #include <string>
+#include "../Math/Integers.h"
 
 IO::DB::DB() {
     //Setup the account
@@ -69,11 +70,11 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
 
     for (const auto &link : links) {
         s += "(";
-        s += std::to_string(link.getHash());
+        s += Math::Integers::ToString(link.getHash());
         s += ",";
-        s += std::to_string(id);
+        s += Math::Integers::ToString(id);
         s += ",";
-        s += std::to_string(link.getTime());
+        s += Math::Integers::ToString(link.getTime());
         s += "),";
     }
 
@@ -121,9 +122,9 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
 
     for (const auto &link : links) {
         s += "(";
-        s += std::to_string(link.getHash());
+        s += Math::Integers::ToString(link.getHash());
         s += ",";
-        s += std::to_string(link.getTime());
+        s += Math::Integers::ToString(link.getTime());
         s += "),";
     }
 

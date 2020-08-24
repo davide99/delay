@@ -2,6 +2,7 @@
 #define MATH_INTEGERS_H
 
 #include <cstdint>
+#include <string>
 
 namespace Math::Integers {
     std::uint64_t BSwap(const std::uint64_t &x);
@@ -11,6 +12,8 @@ namespace Math::Integers {
     std::uint16_t BSwap(const std::uint16_t &x);
 
     std::int16_t BSwap(const std::int16_t &x);
+
+    std::string ToString(std::uint64_t x);
 }
 
 #endif

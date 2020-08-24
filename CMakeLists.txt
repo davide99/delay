@@ -3,7 +3,6 @@ project(fin_cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native")
-set(CMAKE_CXX_FLAGS_DEBUG "-O3 -march=native -mtune=native")
 
 add_subdirectory(mariadbpp)
 include_directories(mariadbpp/include)
