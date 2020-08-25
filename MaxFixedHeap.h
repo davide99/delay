@@ -5,16 +5,14 @@
 #include <cstdint>
 #include <functional>
 
-template<typename T, typename Compare = std::less<T>>
+template<typename T, std::size_t maxSize, typename Compare = std::less<T>>
 class MaxFixedHeap {
 protected:
     std::vector<T> c;
-    size_t maxSize;
     Compare cmp;
 
 public:
-    explicit MaxFixedHeap(size_t maxSize) {
-        this->maxSize = maxSize;
+    explicit MaxFixedHeap() {
         this->c.reserve(maxSize);
     }
 

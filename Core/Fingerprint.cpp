@@ -6,7 +6,7 @@
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
     int currBand, nextBand;
     std::vector<Peak> peakVec;
-    MaxFixedHeap<Peak> tmp(Consts::NPeaks);
+    MaxFixedHeap<Peak, Consts::NPeaks> tmp;
 
     //For each band
     for (std::size_t b = 0; b < Consts::Bands.size() - 1; b++) {
