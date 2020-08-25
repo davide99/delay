@@ -18,6 +18,8 @@ int main() {
     db.create();
     db.insertSong(wavReader.getFileName(), links);
 
+    std::cout << "Fine";
+
     /*IO::WavReader wavMic("../mic.wav");
     Math::Spectrogram specMic(wavMic.getData());
     std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);

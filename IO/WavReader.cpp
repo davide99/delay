@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <cstring>
 #include <algorithm>
+#include <iterator>
 
 /*
  * http://soundfile.sapp.org/doc/WaveFormat/
@@ -125,16 +126,18 @@ IO::WavReader::WavReader(const std::string &fileName) {
         numberOfSamples = (chunk.size << 3u) / (Consts::Channels * Consts::BitsPerSample);
     }
 
-    std::int16_t iData[numberOfSamples];
+    //For whatever reason using a vector instead of a plain old array make valgrind not complain
+    std::vector<std::int16_t> iData;
+    iData.resize(numberOfSamples);
     this->data.resize(numberOfSamples);
 
-    wavFile.read(reinterpret_cast<char *>(iData), numberOfSamples * Consts::BitsPerSample >> 3u);
+    wavFile.read(reinterpret_cast<char *>(iData.data()), numberOfSamples * Consts::BitsPerSample >> 3u);
 
     if (isBigEndian)
         for (auto &sample : iData)
             sample = Math::Integers::BSwap(sample);
 
-    std::transform(iData, iData + numberOfSamples, this->data.data(), [](std::int16_t i) -> float {
+    std::transform(iData.begin(), iData.end(), this->data.data(), [](const std::int16_t &i) -> float {
         return i;
     });
 

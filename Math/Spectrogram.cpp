@@ -19,9 +19,10 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
         Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);
 
-        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(), [](const fftwf_complex i) -> float {
-            return std::sqrt(i[0] * i[0] + i[1] * i[1]);
-        });
+        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(),
+                       [](const fftwf_complex &i) -> float {
+                           return std::sqrt(i[0] * i[0] + i[1] * i[1]);
+                       });
 
         fftWindow.time = (float) i / Consts::SampleRate;
         this->fftWindows.push_back(fftWindow);
