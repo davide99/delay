@@ -18,7 +18,7 @@ int main() {
     db.create();
     db.insertSong(wavReader.getFileName(), links);
 
-    IO::WavReader wavMic("../mic.wav");
+    /*IO::WavReader wavMic("../mic.wav");
     Math::Spectrogram specMic(wavMic.getData());
     std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);
     Core::Links linksMic = Core::Links(peaksMic);
@@ -26,7 +26,7 @@ int main() {
     std::uint64_t id;
     db.searchIdGivenLinks(id, linksMic);
 
-    std::cout << id;
+    std::cout << id;*/
 
     return 0;
 }
