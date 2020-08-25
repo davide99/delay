@@ -1,5 +1,5 @@
-from scipy.io.wavfile import write
 import numpy as np
+from scipy.io.wavfile import write
 
 
 # Generate a wave given a file with a sample for each line

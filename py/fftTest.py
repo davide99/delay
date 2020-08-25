@@ -1,5 +1,5 @@
-from scipy.io.wavfile import read
 import numpy as np
+from scipy.io.wavfile import read
 
 
 # For test purposes
