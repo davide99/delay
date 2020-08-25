@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <cstring>
 #include <algorithm>
-#include <iterator>
 
 /*
  * http://soundfile.sapp.org/doc/WaveFormat/

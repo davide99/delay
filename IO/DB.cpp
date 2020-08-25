@@ -1,7 +1,6 @@
 #include "DB.h"
 #include <mariadb++/account.hpp>
 #include <string>
-#include "../Math/Integers.h"
 
 IO::DB::DB() {
     //Setup the account
