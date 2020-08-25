@@ -6,10 +6,15 @@ std::vector<Core::Peak>
 Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd) {
 
     MaxFixedHeap<Peak> peaks(Consts::NPeaks);
-    float pNeighbour, pCurrent;
+    float pNeighbour, pCurrent, peakFreq;
     int indexLeft, indexRight;
+    bool ok;
 
     for (int i = bandStart; i <= bandEnd; i++) {
+        peakFreq = Math::Window::getFreqBins()[i];
+        if ((peakFreq < Consts::MinFreq) || (peakFreq > Consts::MaxFreq))
+            continue;
+
         //Get the current peak value
         pCurrent = fftWindow.getMagnitudes()[i];
 
@@ -17,15 +22,16 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const in
         //Are there 5 element before and after actually?
         indexLeft = i - Consts::PeakRange >= bandStart ? i - Consts::PeakRange : bandStart;
         indexRight = i + Consts::PeakRange + 1 <= bandEnd ? i + Consts::PeakRange + 1 : bandEnd;
-        pNeighbour = *std::max_element(fftWindow.getMagnitudes().begin() + indexLeft,
-                                       fftWindow.getMagnitudes().begin() + indexRight);
 
-        if (pCurrent == pNeighbour) {
-            float peakFreq = Math::Window::getFreqBins()[i];
+        for (; indexLeft != i && (ok = fftWindow.getMagnitudes()[indexLeft] < pCurrent); indexLeft++);
+        if (!ok)
+            continue;
 
-            if ((peakFreq >= Consts::MinFreq) && (peakFreq <= Consts::MaxFreq))
-                peaks.push(Peak(i, pCurrent, window, fftWindow.getTime()));
-        }
+        for (; indexRight != i && (ok = fftWindow.getMagnitudes()[indexRight] < pCurrent); indexRight--);
+        if (!ok)
+            continue;
+
+        peaks.push(Peak(i, pCurrent, window, fftWindow.getTime()));
     }
 
     return peaks.data();
