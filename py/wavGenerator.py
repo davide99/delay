@@ -2,6 +2,9 @@ from scipy.io.wavfile import write
 import numpy as np
 
 
+# Generate a wave given a file with a sample for each line
+
+
 def main():
     samples = []
 

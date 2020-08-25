@@ -1,12 +1,13 @@
 import sys
 
 
+# Given a file with an integer for each line, counts
+# the occurrences of each value and print them
+
+
 def main():
     values = []
     occ = []
-
-    if len(sys.argv) != 2:
-        quit()
 
     with open(sys.argv[1]) as f:
         for line in f:
@@ -24,4 +25,7 @@ def main():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        quit()
+
     main()
