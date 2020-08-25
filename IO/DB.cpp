@@ -1,5 +1,4 @@
 #include "DB.h"
-#include <mariadb++/account.hpp>
 #include <string>
 
 IO::DB::DB() {
@@ -13,29 +12,45 @@ IO::DB::DB() {
     //Create connection
     this->conn = mariadb::connection::create(acc);
 
+    if (!exists())
+        create();
+
     //Prepare the statements
     this->insSongInfoStmt = this->conn->create_statement(
-            "INSERT INTO " + Consts::DB::InfoTable + " (name) VALUES (?)");
+            "INSERT INTO " + Consts::DB::InfoTableFull + " (name) VALUES (?)");
     this->selSongById = this->conn->create_statement(
-            "SELECT name FROM " + Consts::DB::InfoTable + " WHERE id = ?");
+            "SELECT name FROM " + Consts::DB::InfoTableFull + " WHERE id = ?");
+}
+
+bool IO::DB::exists() {
+    try {
+        mariadb::result_set_ref result = this->conn->query(
+                "SELECT table_name FROM information_schema.tables WHERE table_schema='" + Consts::DB::Name + "' " +
+                "OR table_name='" + Consts::DB::RecordingsTable + "' " +
+                "OR table_name='" + Consts::DB::InfoTable + "' " +
+                "OR table_name='" + Consts::DB::TmpRecordTable + "'");
+
+        return result->row_count() == 3;
+    } catch (const std::exception &e) {}
+
+    return false;
 }
 
 bool IO::DB::create() {
     try {
         this->conn->execute("CREATE DATABASE IF NOT EXISTS " + Consts::DB::Name);
 
-        this->conn->execute("CREATE TABLE IF NOT EXISTS " + Consts::DB::InfoTable + " (" +
+        this->conn->execute("CREATE TABLE IF NOT EXISTS " + Consts::DB::InfoTableFull + " (" +
                             "id " + Consts::DB::UInt + " NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                            "name VARCHAR(200) NOT NULL" +
-                            ")");
+                            "name VARCHAR(200) NOT NULL)");
 
-        this->conn->execute("CREATE TABLE IF NOT EXISTS " + Consts::DB::RecordingsTable + " (" +
+        this->conn->execute("CREATE TABLE IF NOT EXISTS " + Consts::DB::RecordingsTableFull + " (" +
                             "hash " + Consts::DB::UInt64 + " NOT NULL, " +
                             "songId " + Consts::DB::UInt + " NOT NULL, " +
                             "time " + Consts::DB::UInt64 + " NOT NULL, " +
                             "PRIMARY KEY (hash, songId, time), " +
-                            "FOREIGN KEY (songId) REFERENCES " + Consts::DB::InfoTable + "(id)" +
-                            ")");
+                            "FOREIGN KEY (songId) REFERENCES " + Consts::DB::InfoTableFull + "(id))");
+
     } catch (const std::exception &e) {
         return false;
     }
@@ -65,7 +80,7 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     }
 
     //Insert Links
-    std::string s = "INSERT INTO " + Consts::DB::RecordingsTable + " (hash, songId, time) VALUES ";
+    std::string s = "INSERT INTO " + Consts::DB::RecordingsTableFull + " (hash, songId, time) VALUES ";
 
     for (const auto &link : links) {
         s += "(";
@@ -107,7 +122,7 @@ std::string IO::DB::getSongNameById(const std::uint64_t &id) {
 bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
     //Create the temporary table
     try {
-        this->conn->execute("CREATE TEMPORARY TABLE " + Consts::DB::TmpRecordTable + " (" +
+        this->conn->execute("CREATE TEMPORARY TABLE " + Consts::DB::TmpRecordTableFull + " (" +
                             "hash " + Consts::DB::UInt64 + " NOT NULL, " +
                             "start " + Consts::DB::UInt64 + " NOT NULL, " +
                             "PRIMARY KEY (hash, start)" +
@@ -117,7 +132,7 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
     }
 
     //Insert recording links in the temporary table
-    std::string s = "INSERT INTO " + Consts::DB::TmpRecordTable + " VALUES ";
+    std::string s = "INSERT INTO " + Consts::DB::TmpRecordTableFull + " VALUES ";
 
     for (const auto &link : links) {
         s += "(";
@@ -140,11 +155,12 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
 
     try {
         result = this->conn->query(
-                "SELECT " + Consts::DB::RecordingsTable + ".songId, COUNT(*) AS n " +
-                "FROM " + Consts::DB::RecordingsTable + " INNER JOIN " + Consts::DB::TmpRecordTable + " " +
-                "ON " + Consts::DB::RecordingsTable + ".hash=" + Consts::DB::TmpRecordTable + ".hash " +
-                "WHERE " + Consts::DB::RecordingsTable + ".time>=" + Consts::DB::TmpRecordTable + ".start " +
-                "GROUP BY " + Consts::DB::RecordingsTable + ".time-" + Consts::DB::TmpRecordTable + ".start, songId " +
+                "SELECT " + Consts::DB::RecordingsTableFull + ".songId, COUNT(*) AS n " +
+                "FROM " + Consts::DB::RecordingsTableFull + " INNER JOIN " + Consts::DB::TmpRecordTableFull + " " +
+                "ON " + Consts::DB::RecordingsTableFull + ".hash=" + Consts::DB::TmpRecordTableFull + ".hash " +
+                "WHERE " + Consts::DB::RecordingsTableFull + ".time>=" + Consts::DB::TmpRecordTableFull + ".start " +
+                "GROUP BY " + Consts::DB::RecordingsTableFull + ".time-" + Consts::DB::TmpRecordTableFull +
+                ".start, songId " +
                 "ORDER BY n DESC");
 
         if (result->next() && result->get_unsigned64(1) > Consts::DB::MinHint)

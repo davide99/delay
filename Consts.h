@@ -33,9 +33,13 @@ namespace Consts {
         const std::string Name = "musiclibrary";
 
         //Table names
-        const std::string RecordingsTable = Name + ".recordings";
-        const std::string InfoTable = Name + ".musicinfo";
-        const std::string TmpRecordTable = Name + "._recordings";
+        const std::string RecordingsTable = "recordings";
+        const std::string InfoTable = "musicinfo";
+        const std::string TmpRecordTable = "_recordings";
+
+        const std::string RecordingsTableFull = Name + "." + RecordingsTable;
+        const std::string InfoTableFull = Name + "." + InfoTable;
+        const std::string TmpRecordTableFull = Name + "." + TmpRecordTable;
 
         //Table fields
         const std::string UInt64 = "BIGINT UNSIGNED";

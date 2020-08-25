@@ -1,13 +1,15 @@
 #include <vector>
 #include <iostream>
+#include <chrono>
 #include "IO/WavReader.h"
 #include "Math/Spectrogram.h"
 #include "Core/Fingerprint.h"
-#include "Core/Peak.h"
 #include "Core/Links.h"
 #include "IO/DB.h"
 
 int main() {
+    auto start = std::chrono::high_resolution_clock::now();
+
     IO::WavReader wavReader("../out.wav");
     Math::Spectrogram spectrogram(wavReader.getData());
     std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
@@ -18,7 +20,10 @@ int main() {
     db.create();
     db.insertSong(wavReader.getFileName(), links);
 
-    std::cout << "Fine";
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    std::cout << duration << std::endl;
 
     /*IO::WavReader wavMic("../mic.wav");
     Math::Spectrogram specMic(wavMic.getData());

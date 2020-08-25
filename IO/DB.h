@@ -17,6 +17,8 @@ namespace IO {
 
         ~DB();
 
+        bool exists();
+
         bool create();
 
         bool drop();
