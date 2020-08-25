@@ -10,14 +10,14 @@ Core::Links::Links(const std::vector<Peak> &peakVec) {
 
     for (auto it = peakVec.begin(); it != peakVec.end(); it++) {
         std::copy_if(
-                (it - windowDistance >= peakVec.begin() ? it - windowDistance : peakVec.begin()),
-                (it + windowDistance <= peakVec.end() ? it + windowDistance : peakVec.end()),
+                it - windowDistance >= peakVec.begin() ? it - windowDistance : peakVec.begin(),
+                it + windowDistance <= peakVec.end() ? it + windowDistance : peakVec.end(),
                 std::back_inserter(tmpPeaks),
                 [&it](const Peak &a) -> bool {
-                    return (std::abs(a.getTime() - it->getTime()) >= Consts::MinWinDistanceF) && (a.compareBand(*it));
+                    return (std::abs(a.getTime() - it->getTime()) >= Consts::MinWinDistanceF) && (a.sameBand(*it));
                 });
 
-        for (const auto &a:tmpPeaks)
+        for (const auto &a : tmpPeaks)
             this->push_back(Link(*it, a));
 
         tmpPeaks.clear();

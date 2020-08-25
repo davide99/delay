@@ -23,12 +23,12 @@ namespace Core {
 
         [[nodiscard]] const float &getTime() const;
 
-        [[nodiscard]] bool compareBand(const Peak &peak) const;
+        [[nodiscard]] bool sameBand(const Peak &peak) const;
 
         bool operator<(const Peak &peak) const;
 
     private:
-        [[nodiscard]] int getBand() const;
+        [[nodiscard]] std::size_t getBand() const;
 
     };
 }
