@@ -25,4 +25,5 @@ add_executable(fin_cpp
         Core/Links.cpp Core/Links.h
         IO/DB.cpp IO/DB.h)
 
+target_link_libraries(fin_cpp fftw3f mariadbclientpp)
 target_compile_definitions(fin_cpp PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")

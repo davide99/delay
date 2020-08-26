@@ -9,6 +9,8 @@
 #include "Utils.h"
 
 void insert(const std::string &fileName, IO::DB &db) {
+    std::cout << fileName << std::endl;
+
     IO::WavReader wavReader(fileName);
     Math::Spectrogram spectrogram(wavReader.getData());
     std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
