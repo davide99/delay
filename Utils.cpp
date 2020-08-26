@@ -14,12 +14,20 @@ bool Utils::isBigEndian() {
     return ptr[0] == 0;
 }
 
-std::vector<std::string> Utils::listFiles(const std::string &path) {
+//https://stackoverflow.com/a/2072890/6441490
+bool endsWith(const std::string &str, const std::string &ending) {
+    if(ending.size() > str.size())
+        return false;
+
+    return std::equal(ending.rbegin(), ending.rend(), str.rbegin());
+}
+
+std::vector<std::string> Utils::listFiles(const std::string &path, const std::string &extension) {
     namespace fs = std::filesystem;
     std::vector<std::string> files;
 
     for (const auto &p : fs::directory_iterator(path))
-        if (!p.is_directory())
+        if (!p.is_directory() && (extension.empty() || end_with(p.path().string(), extension)))
             files.push_back(p.path().string());
 
     return files;

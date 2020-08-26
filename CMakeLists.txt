@@ -15,6 +15,7 @@ add_executable(fin_cpp
         Consts.h
         Math/Integers.cpp Math/Integers.h
         MaxFixedHeap.h
+        FuturePool.h
         Math/Window.cpp Math/Window.h
         Math/Vector.h
         Math/Spectrogram.cpp Math/Spectrogram.h
