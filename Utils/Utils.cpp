@@ -16,7 +16,7 @@ bool Utils::isBigEndian() {
 
 //https://stackoverflow.com/a/2072890/6441490
 bool Utils::endsWith(const std::string &str, const std::string &ending) {
-    if(ending.size() > str.size())
+    if (ending.size() > str.size())
         return false;
 
     return std::equal(ending.rbegin(), ending.rend(), str.rbegin());
@@ -31,4 +31,19 @@ std::vector<std::string> Utils::listFiles(const std::string &path, const std::st
             files.push_back(p.path().string());
 
     return files;
+}
+
+std::string Utils::trim(const std::string &str) {
+    std::string s = str;
+
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+
+
+    return s;
 }

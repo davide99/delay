@@ -5,31 +5,46 @@
 #include "Utils/Wrapper.h"
 
 int main(int argc, char **argv) {
-    if (argc != 2)
-        std::cerr << "Remember to pass the path of the WAV directory" << std::endl;
+    if (argc != 3) {
+        std::cerr << "Wrong number of parameters, please use: " << std::endl
+                  << "-i <path to wav directory>" << std::endl
+                  << "-s <path to wav recording>" << std::endl
+                  << "-d database => drop database" << std::endl;
+    } else {
+        auto command = Utils::trim(std::string(argv[1]));
+        auto argument = Utils::trim(std::string(argv[2]));
 
-    auto start = std::chrono::high_resolution_clock::now();
+        auto start = std::chrono::high_resolution_clock::now();
+        IO::DB db;
 
-    std::vector<std::string> fileList = Utils::listFiles(std::string(argv[1]), "wav");
-    IO::DB db;
+        if (command == "-i") {
+            std::vector<std::string> fileList = Utils::listFiles(argument, "wav");
 
-    for (const auto &fileName:fileList)
-        Utils::insertSong(fileName, db);
+            for (const auto &fileName:fileList) {
+                std::cout << "Analyzing " << fileName << std::endl;
+                Utils::insertSong(fileName, db);
+            }
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        } else if (command == "-s") {
+            auto songFile = Utils::search(argument, db);
 
-    std::cout << duration << std::endl;
+            if (songFile.empty())
+                std::cout << "Can't find the song" << std::endl;
+            else
+                std::cout << "Found: " << songFile << std::endl;
 
-    /*IO::WavReader wavMic("../mic.wav");
-    Math::Spectrogram specMic(wavMic.getData());
-    std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);
-    Core::Links linksMic = Core::Links(peaksMic);
+        } else if (command == "-d" && argument == "database") {
+            if (db.drop())
+                std::cout << "Database dropped" << std::endl;
+            else
+                std::cout << "Can't drop database" << std::endl;
+        }
 
-    std::uint64_t id;
-    db.searchIdGivenLinks(id, linksMic);
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
-    std::cout << id;*/
+        std::cout << "Elapsed: " << duration << "ms" << std::endl;
+    }
 
     return 0;
 }

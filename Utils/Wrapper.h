@@ -16,6 +16,19 @@ namespace Utils {
 
         db.insertSong(fileName, links);
     }
+
+    std::string search(const std::string &fileName, IO::DB &db) {
+        IO::WavReader wavMic(fileName);
+        Math::Spectrogram specMic(wavMic.getData());
+        std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);
+        Core::Links linksMic = Core::Links(peaksMic);
+
+        std::uint64_t id;
+        if (db.searchIdGivenLinks(id, linksMic))
+            return db.getSongNameById(id);
+        else
+            return "";
+    }
 };
 
 

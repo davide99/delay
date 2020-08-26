@@ -12,6 +12,8 @@ namespace Utils {
     bool endsWith(const std::string &str, const std::string &ending);
 
     std::vector<std::string> listFiles(const std::string &path, const std::string &extension = "");
+
+    std::string trim(const std::string &str);
 }
 
 #endif
