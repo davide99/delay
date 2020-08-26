@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="fin_cpp" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="C:\Users\Davide\Desktop\wav" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="fin_cpp" TARGET_NAME="fin_cpp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="fin_cpp" RUN_TARGET_NAME="fin_cpp">
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>

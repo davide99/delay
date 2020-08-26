@@ -6,7 +6,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native")
 
 add_subdirectory(mariadbpp)
 include_directories(mariadbpp/include)
-#include_directories(/usr/include/mysql)
 
 add_executable(fin_cpp
         main.cpp
@@ -15,7 +14,6 @@ add_executable(fin_cpp
         Consts.h
         Math/Integers.cpp Math/Integers.h
         MaxFixedHeap.h
-        FuturePool.h
         Math/Window.cpp Math/Window.h
         Math/Vector.h
         Math/Spectrogram.cpp Math/Spectrogram.h
@@ -27,5 +25,4 @@ add_executable(fin_cpp
         Core/Links.cpp Core/Links.h
         IO/DB.cpp IO/DB.h)
 
-target_link_libraries(fin_cpp fftw3f mariadbclientpp)
 target_compile_definitions(fin_cpp PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")

@@ -9,7 +9,7 @@ namespace Utils {
 
     bool isBigEndian();
 
-    bool end_with(const std::string &str, const std::string &ending);
+    bool endsWith(const std::string &str, const std::string &ending);
 
     std::vector<std::string> listFiles(const std::string &path, const std::string &extension = "");
 }

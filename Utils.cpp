@@ -15,7 +15,7 @@ bool Utils::isBigEndian() {
 }
 
 //https://stackoverflow.com/a/2072890/6441490
-bool endsWith(const std::string &str, const std::string &ending) {
+bool Utils::endsWith(const std::string &str, const std::string &ending) {
     if(ending.size() > str.size())
         return false;
 
@@ -27,7 +27,7 @@ std::vector<std::string> Utils::listFiles(const std::string &path, const std::st
     std::vector<std::string> files;
 
     for (const auto &p : fs::directory_iterator(path))
-        if (!p.is_directory() && (extension.empty() || end_with(p.path().string(), extension)))
+        if (!p.is_directory() && (extension.empty() || endsWith(p.path().string(), extension)))
             files.push_back(p.path().string());
 
     return files;

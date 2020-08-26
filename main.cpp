@@ -7,7 +7,15 @@
 #include "Core/Links.h"
 #include "IO/DB.h"
 #include "Utils.h"
-#include "FuturePool.h"
+
+void insert(const std::string &fileName, IO::DB &db) {
+    IO::WavReader wavReader(fileName);
+    Math::Spectrogram spectrogram(wavReader.getData());
+    std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
+    Core::Links links = Core::Links(peaks);
+
+    db.insertSong(fileName, links);
+}
 
 int main(int argc, char **argv) {
     if (argc != 2)
@@ -15,24 +23,14 @@ int main(int argc, char **argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    std::vector<std::string> fileList = Utils::listFiles(std::string(argv[1]), "");
+    std::vector<std::string> fileList = Utils::listFiles(std::string(argv[1]), "wav");
 
     IO::DB db;
     db.drop();
     db.create();
 
-    FuturePool futurePool;
-
-    for (const auto &fileName:fileList) {
-        futurePool.pushTask([&fileName, &db]() {
-            IO::WavReader wavReader(fileName);
-            Math::Spectrogram spectrogram(wavReader.getData());
-            std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
-            Core::Links links = Core::Links(peaks);
-
-            db.insertSong(fileName, links);
-        });
-    }
+    for (const auto &fileName:fileList)
+        insert(fileName, db);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
