@@ -5,7 +5,7 @@
 std::vector<Core::Peak>
 Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd) {
 
-    MaxFixedHeap<Peak, Consts::NPeaks> peaks;
+    Utils::MaxFixedHeap<Peak, Consts::NPeaks> peaks;
     float magCurrent, freqCurrent;
     int indexLeft, indexRight;
     bool ok;
