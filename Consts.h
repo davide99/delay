@@ -13,10 +13,15 @@ namespace Consts {
     constexpr uint16_t WinSize = 512u;
     constexpr uint16_t Overlap = 256u;
     constexpr uint16_t StepSize = WinSize - Overlap;
-    constexpr uint16_t FFTOutSize = WinSize / 2 + 1;
-    constexpr uint16_t FreqBins = FFTOutSize;
+    constexpr uint16_t FreqBins = WinSize / 2;
 
-    constexpr std::array<uint8_t, 10> Bands = {11, 22, 35, 50, 69, 91, 117, 149, 187, 231};
+    namespace Window {
+        constexpr std::uint16_t MelStart = 250u;
+        constexpr std::uint16_t MelStep = 200u;
+
+        constexpr float FreqBinStep = ((float) SampleRate) / WinSize;
+    }
+
     constexpr std::uint8_t C = 32u;
     constexpr std::uint8_t NPeaks = 3u;
     constexpr std::uint8_t PeakRange = 5u;
@@ -35,7 +40,7 @@ namespace Consts {
         //Table names
         const std::string RecordingsTable = "recordings";
         const std::string InfoTable = "musicinfo";
-        const std::string TmpRecordTable = "_recordings";
+        const std::string TmpRecordTable = "_recording";
 
         const std::string RecordingsTableFull = Name + "." + RecordingsTable;
         const std::string InfoTableFull = Name + "." + InfoTable;

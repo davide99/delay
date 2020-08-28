@@ -12,6 +12,8 @@ namespace Math::Integers {
     std::uint16_t BSwap(const std::uint16_t &x);
 
     std::int16_t BSwap(const std::int16_t &x);
+
+    std::int64_t BSwap(const std::int64_t &x);
 }
 
 #endif

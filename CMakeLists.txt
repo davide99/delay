@@ -26,5 +26,5 @@ add_executable(fin_cpp
         IO/DB.cpp IO/DB.h
         Utils/Wrapper.h)
 
-target_link_libraries(fin_cpp fftw3f mariadbclientpp)
+target_link_libraries(fin_cpp fftw3f mariadbclientpp stdc++fs)
 target_compile_definitions(fin_cpp PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")

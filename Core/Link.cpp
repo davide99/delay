@@ -4,8 +4,8 @@
 #include "../xxHash/xxh3.h"
 
 Core::Link::Link(const Peak &address, const Peak &peak) {
-    std::uint64_t deltaTime = peak.getWindow() - address.getWindow();
-    std::uint64_t deltaFreq = peak.getFreqIndex() - address.getFreqIndex();
+    std::int64_t deltaTime = peak.getWindow() - address.getWindow();
+    std::int64_t deltaFreq = peak.getFreqIndex() - address.getFreqIndex();
     std::uint64_t addrFreq = address.getFreqIndex();
 
     XXH3_state_t state;

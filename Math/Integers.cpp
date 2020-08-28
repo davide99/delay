@@ -29,8 +29,8 @@ std::uint16_t Math::Integers::BSwap(const std::uint16_t &x) {
 
 std::int16_t Math::Integers::BSwap(const std::int16_t &x) {
     std::uint16_t val_u = *(std::uint16_t *) &x;  //Convert to unsigned
-    val_u = BSwap(val_u);               //Convert to big endian
-    return *(std::int16_t *) &val_u;         //Make it signed
+    val_u = BSwap(val_u);                         //Convert to big endian
+    return *(std::int16_t *) &val_u;              //Make it signed
 }
 
 std::uint64_t Math::Integers::BSwap(const std::uint64_t &x) {
@@ -50,4 +50,10 @@ std::uint64_t Math::Integers::BSwap(const std::uint64_t &x) {
             (( x & 0x000000000000ff00ull ) << 40u ) |
             (( x & 0x00000000000000ffull ) << 56u ));
 #endif
+}
+
+std::int64_t Math::Integers::BSwap(const int64_t &x) {
+    std::uint64_t val_u = *(std::uint64_t *) &x;  //Convert to unsigned
+    val_u = BSwap(val_u);                         //Convert to big endian
+    return *(std::int64_t *) &val_u;              //Make it signed
 }

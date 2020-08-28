@@ -3,6 +3,8 @@
 #include "Vector.h"
 #include "Window.h"
 
+static constexpr std::uint16_t FFTOutSize = Consts::WinSize / 2 + 1;
+
 Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
     //Calculation of the winFFT size
     std::size_t winFFTsize = ((std::size_t) ((data.size() - Consts::WinSize) / Consts::StepSize)) * Consts::StepSize;
@@ -10,7 +12,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
 
     FFTWindow fftWindow;
     float timeWindow[Consts::WinSize];
-    fftwf_complex fftOut[Consts::FFTOutSize];
+    fftwf_complex fftOut[FFTOutSize];
 
     fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::WinSize, timeWindow, fftOut, FFTW_ESTIMATE);
 
@@ -19,7 +21,8 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
         Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::WinSize);
         fftwf_execute(p);
 
-        std::transform(fftOut, fftOut + Consts::FFTOutSize, fftWindow.magnitudes.data(),
+        //The first bin in the FFT output is the DC component, get rid of it by starting at fftOut+1
+        std::transform(fftOut + 1, fftOut + FFTOutSize, fftWindow.magnitudes.data(),
                        [](const fftwf_complex &i) -> float {
                            return std::sqrt(i[0] * i[0] + i[1] * i[1]);
                        });

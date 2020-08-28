@@ -1,4 +1,5 @@
 #include "Peak.h"
+#include "../Math/Window.h"
 #include <algorithm>
 
 const int &Core::Peak::getFreqIndex() const {
@@ -10,10 +11,11 @@ const std::size_t &Core::Peak::getWindow() const {
 }
 
 std::size_t Core::Peak::getBand() const {
-    auto iter = std::lower_bound(Consts::Bands.begin(), Consts::Bands.end(), this->freqIndex);
+    const auto &bands = Math::Window::getBands();
+    auto iter = std::lower_bound(bands.begin(), bands.end(), this->freqIndex);
 
-    if (iter != Consts::Bands.end())
-        return std::distance(Consts::Bands.begin(), iter);
+    if (iter != bands.end())
+        return std::distance(bands.begin(), iter);
     else
         return SIZE_MAX;
 }

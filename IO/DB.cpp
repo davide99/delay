@@ -52,6 +52,7 @@ bool IO::DB::create() {
                             "FOREIGN KEY (songId) REFERENCES " + Consts::DB::InfoTableFull + "(id))");
 
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -62,6 +63,7 @@ bool IO::DB::drop() {
     try {
         this->conn->execute("DROP DATABASE IF EXISTS " + Consts::DB::Name);
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -76,6 +78,7 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
         this->insSongInfoStmt->set_string(0, name);
         id = this->insSongInfoStmt->insert();
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -97,6 +100,7 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     try {
         conn->insert(s);
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -128,6 +132,7 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
                             "PRIMARY KEY (hash, start)" +
                             ") ENGINE = MEMORY");
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -147,6 +152,7 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
     try {
         conn->insert(s);
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 
@@ -170,6 +176,7 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
         std::cout << ">>Number of common hashes: " << result->get_unsigned64(1) << std::endl;
 #endif
     } catch (const std::exception &e) {
+        e.what();
         return false;
     }
 

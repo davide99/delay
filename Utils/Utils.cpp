@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <cstdint>
 #include <filesystem>
+#include <algorithm>
 
 bool Utils::fileExists(const std::string &fileName) {
     return access(fileName.c_str(), F_OK) == 0;
