@@ -1,6 +1,5 @@
 #include "DB.h"
 #include <string>
-#include <fstream>
 #include "../Math/Integers.h"
 
 IO::DB::DB() {
@@ -88,11 +87,11 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     std::string s = "INSERT INTO " + Consts::DB::RecordingsTableFull + " (hash, songId, time) VALUES ";
 
     for (const auto &link : links) {
-        s += "(0x";
+        s += "(";
         s += Math::Integers::toHex(link.getHash());
-        s += ",0x";
+        s += ",";
         s += Math::Integers::toHex(id);
-        s += ",0x";
+        s += ",";
         s += Math::Integers::toHex(link.getTime());
         s += "),";
     }
@@ -143,9 +142,9 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
 
     for (const auto &link : links) {
         s += "(";
-        s += std::to_string(link.getHash());
+        s += Math::Integers::toHex(link.getHash());
         s += ",";
-        s += std::to_string(link.getTime());
+        s += Math::Integers::toHex(link.getTime());
         s += "),";
     }
 

@@ -1,5 +1,6 @@
 #include "Integers.h"
 #include <cstring>
+#include <algorithm>
 
 std::uint32_t Math::Integers::BSwap(const std::uint32_t &x) {
 #if defined(_MSC_VER)
@@ -60,7 +61,8 @@ std::int64_t Math::Integers::BSwap(const int64_t &x) {
 }
 
 constexpr auto MaxUInt64Len = 16u;
-static char buff[MaxUInt64Len];
+constexpr auto buffLen = MaxUInt64Len + 2u;
+static char buff[buffLen];
 static char hexTable[] = "000102030405060708090A0B0C0D0E0F"
                          "101112131415161718191A1B1C1D1E1F"
                          "202122232425262728292A2B2C2D2E2F"
@@ -77,13 +79,14 @@ static char hexTable[] = "000102030405060708090A0B0C0D0E0F"
                          "D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF"
                          "E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF"
                          "F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF";
+static char hexPre[] = "0x";
 
 
 std::string_view Math::Integers::toHex(std::uint64_t x) {
     int i;
     std::uint_fast8_t byte;
 
-    i = MaxUInt64Len;
+    i = buffLen;
     do {
         i -= 2;
         byte = x & 0xFFu;
@@ -95,7 +98,9 @@ std::string_view Math::Integers::toHex(std::uint64_t x) {
     if (buff[i] == '0')
         i++;
 
-    auto a = std::string_view(buff + i, MaxUInt64Len - i);
+    i -= 2;
 
-    return a;
+    std::memcpy(buff + i, hexPre, 2);
+
+    return std::string_view(buff + i, buffLen - i);
 }
