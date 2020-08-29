@@ -3,6 +3,7 @@
 #include <chrono>
 #include "Utils/Utils.h"
 #include "Utils/Wrapper.h"
+#include "Math/Integers.h"
 
 int main(int argc, char **argv) {
     if (argc != 3) {
@@ -14,15 +15,22 @@ int main(int argc, char **argv) {
         auto command = Utils::trim(std::string(argv[1]));
         auto argument = Utils::trim(std::string(argv[2]));
 
-        auto start = std::chrono::high_resolution_clock::now();
         IO::DB db;
 
         if (command == "-i") {
+            auto start = std::chrono::high_resolution_clock::now();
             std::vector<std::string> fileList = Utils::listFiles(argument, "wav");
 
             for (const auto &fileName:fileList) {
                 std::cout << "Analyzing " << fileName << std::endl;
                 Utils::insertSong(fileName, db);
+            }
+
+            if (!fileList.empty()) {
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::high_resolution_clock::now() - start).count() / fileList.size();
+
+                std::cout << "Mean time for each song: " << duration << "ms" << std::endl;
             }
 
         } else if (command == "-s") {
@@ -39,11 +47,6 @@ int main(int argc, char **argv) {
             else
                 std::cout << "Can't drop database" << std::endl;
         }
-
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-
-        std::cout << "Elapsed: " << duration << "ms" << std::endl;
     }
 
     return 0;

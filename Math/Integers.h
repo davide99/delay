@@ -14,6 +14,8 @@ namespace Math::Integers {
     std::int16_t BSwap(const std::int16_t &x);
 
     std::int64_t BSwap(const std::int64_t &x);
+
+    std::string_view toHex(std::uint64_t x);
 }
 
 #endif
