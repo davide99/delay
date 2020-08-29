@@ -1,3 +1,13 @@
+# Music recognition system in C++17
+
+## Requirements
+* MariaDB / MySQL
+* Some WAV files
+* ffmpeg (optional)
+
+## Convert an audio to WAV
+`ffmpeg -i audiofile.ext -ar 8000 -ac 1 out.wav`
+
 ## Build instructions (Debian)
 
 1. `git submodule update --init --recursive`
