@@ -1,5 +1,5 @@
 #include "Fingerprint.h"
-#include "../MaxFixedHeap.h"
+#include "../Utils/MaxFixedHeap.h"
 #include "PeaksFinder.h"
 #include "../Math/Window.h"
 #include <cstdint>

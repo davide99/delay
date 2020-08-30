@@ -1,5 +1,5 @@
 #include "PeaksFinder.h"
-#include "../MaxFixedHeap.h"
+#include "../Utils/MaxFixedHeap.h"
 
 std::vector<Core::Peak>
 Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd) {
