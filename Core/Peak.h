@@ -4,6 +4,7 @@
 #include "../Consts.h"
 #include <cstdint>
 #include <type_traits>
+#include "../Math/Window.h"
 
 namespace Core {
     class Peak {
@@ -12,10 +13,12 @@ namespace Core {
         float power;
         std::size_t window;
         float time;
+        int bandIndex;
 
     public:
         Peak(const int &freqIndex, const float &power, const std::size_t &window, const float &time) :
-                freqIndex(freqIndex), power(power), window(window), time(time) {};
+                freqIndex(freqIndex), power(power), window(window), time(time),
+                bandIndex(Math::Window::getBandIndex(freqIndex)) {};
 
         [[nodiscard]] const int &getFreqIndex() const;
 
@@ -26,9 +29,6 @@ namespace Core {
         [[nodiscard]] bool sameBand(const Peak &peak) const;
 
         bool operator<(const Peak &peak) const;
-
-    private:
-        [[nodiscard]] std::size_t getBand() const;
 
     };
 }

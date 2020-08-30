@@ -18,6 +18,10 @@ int main(int argc, char **argv) {
         IO::DB db;
 
         if (command == "-i") {
+#ifdef DEBUG
+            db.drop();
+            db.create();
+#endif
             auto start = std::chrono::high_resolution_clock::now();
             std::vector<std::string> fileList = Utils::listFiles(argument, "wav");
 

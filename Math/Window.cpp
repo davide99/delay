@@ -1,6 +1,5 @@
 #include "Window.h"
 #include <cmath>
-#include <iostream>
 
 const std::array<float, Consts::WinSize> &Math::Window::get() {
     if (!Math::Window::winInitialized) {
@@ -42,4 +41,25 @@ const std::vector<int> &Math::Window::getBands() {
     }
 
     return Math::Window::bands;
+}
+
+const int &Math::Window::getBandIndex(const int &band) {
+    if (!Math::Window::bandsMapInitialized) {
+        const auto &bandsVec = getBands();
+        auto it = bandsVec.begin();
+        int bandIndex = 0;
+
+        for (int i = 0; i < Consts::FreqBins; i++) {
+            if (i >= *it && it != bandsVec.end()) {
+                it++;
+                bandIndex++;
+            }
+
+            bandsMap[i] = bandIndex;
+        }
+
+        Math::Window::bandsMapInitialized = true;
+    }
+
+    return Math::Window::bandsMap[band];
 }

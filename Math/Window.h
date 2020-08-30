@@ -15,6 +15,9 @@ namespace Math::Window {
 
         bool melBandsInitialized = false;
         std::vector<int> bands;
+
+        bool bandsMapInitialized = false;
+        std::array<int, Consts::FreqBins> bandsMap;
     }
 
     const std::array<float, Consts::WinSize> &get();
@@ -22,6 +25,8 @@ namespace Math::Window {
     const std::array<float, Consts::FreqBins> &getFreqBins();
 
     const std::vector<int> &getBands();
+
+    const int &getBandIndex(const int &band);
 }
 
 #endif

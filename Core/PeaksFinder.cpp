@@ -1,5 +1,4 @@
 #include "PeaksFinder.h"
-#include "../Math/Window.h"
 #include "../MaxFixedHeap.h"
 
 std::vector<Core::Peak>
