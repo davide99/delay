@@ -6,7 +6,7 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const in
 
     Utils::MaxFixedHeap<Peak, Consts::NPeaks> peaks;
     float magCurrent, freqCurrent;
-    int indexLeft, indexRight;
+    int indexLeft, indexRight, j;
     bool ok;
 
     for (int i = bandStart; i <= bandEnd; i++) {
@@ -26,9 +26,11 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const in
         if (!ok)
             continue;
 
-        for (; indexRight != i && (ok = fftWindow.getMagnitudes()[indexRight] < magCurrent); indexRight--);
-        if (!ok)
+        for (j = i + 1; j <= indexRight && (ok = fftWindow.getMagnitudes()[j] < magCurrent); j++);
+        if (!ok) {
+            i = j - 1;
             continue;
+        }
 
         peaks.push(Peak(i, magCurrent, window, fftWindow.getTime()));
     }
