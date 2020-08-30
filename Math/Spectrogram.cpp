@@ -34,7 +34,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
     fftwf_destroy_plan(p);
 }
 
-Math::FFTWindow Math::Spectrogram::operator[](std::size_t pos) const {
+const Math::FFTWindow &Math::Spectrogram::operator[](std::size_t pos) const {
     return this->fftWindows[pos];
 }
 
