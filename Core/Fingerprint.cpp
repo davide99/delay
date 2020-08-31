@@ -6,8 +6,8 @@
 
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
     int currBand, nextBand;
-    std::vector<Peak> peakVec;
-    Utils::MaxFixedHeap<Peak, Consts::NPeaks> tmp;
+    std::vector<Peak> peakVec; //vector to be returned
+    Utils::MaxFixedHeap<Peak, Consts::NPeaks> tmp; //to store the temporary loudest peaks
 
     const auto &bands = Math::Window::getBands();
 
@@ -19,15 +19,15 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
         //For each window in the spectrogram
         for (std::size_t i = 0; i < spectrogram.size(); i++) {
 
-            //Every C, or at the end of the window, add tmp to peakList nad reset tmp
+            //Every C, or at the end of the window, add tmp to peakVec then reset tmp
             if (i % Consts::C == 0 || i == spectrogram.size() - 1) {
                 peakVec.insert(peakVec.end(), tmp.begin(), tmp.end());
                 tmp.clear();
             }
 
-            //Extract between band
+            //Actually find the peaks between the two bands
             std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], i, currBand, nextBand - 1);
-            for (const auto &peak : foundPeaks)
+            for (const auto &peak : foundPeaks) //Copy the found peaks in the tmp peaks holder
                 tmp.push(peak);
         }
     }

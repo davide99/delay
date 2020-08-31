@@ -7,6 +7,9 @@
 #include "../Math/Spectrogram.h"
 #include "../Core/Fingerprint.h"
 
+/*
+ * Just a wrapper around the two main functions
+ */
 namespace Utils {
     void insertSong(const std::string &fileName, IO::DB &db) {
         IO::WavReader wavReader(fileName);
