@@ -33,12 +33,14 @@ To do so add `max_allowed_packet=64M` to `/etc/my.cnf` or
 
 ## Requirements
 <a name="requirements"/>
+
 * MariaDB / MySQL
 * Some WAV files
 * ffmpeg (optional)
 
 ## Convert an audio to WAV
 <a name="convertWav"/>
+
 `ffmpeg -i audiofile.ext -ar 8000 -ac 1 out.wav`
 
 ## Build instructions
@@ -56,6 +58,7 @@ To do so add `max_allowed_packet=64M` to `/etc/my.cnf` or
 
 ## Contributing
 <a name="contrib"/>
+
 Since C++ is a bit new to me there might be some errors or incorrectness
 in the code: feel free to make a pull request, open a issue or contact
 me :)
