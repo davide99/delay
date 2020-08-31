@@ -7,12 +7,12 @@ release optimizations turned on.
 
 The algorithm is discussed in the [algorithm.pdf](algorithm.pdf) file.
 
-##### Table of Contents
-> [Configuration](#configuration)
-> [Requirements](#requirements)
-> [Convert an audio to WAV](#convertWav)
-> [Build instructions](#build)
-> [Contributing](#contrib)
+## Table of Contents
+> * [Configuration](#configuration)
+> * [Requirements](#requirements)
+> * [Convert an audio to WAV](#convertWav)
+> * [Build instructions](#build)
+> * [Contributing](#contrib)
 
 ## Configuration
 <a name="configuration"/>
