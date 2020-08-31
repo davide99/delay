@@ -7,6 +7,14 @@ release optimizations turned on.
 
 The algorithm is discussed in the [algorithm.pdf](algorithm.pdf) file.
 
+##### Table of Contents
+[Configuration](#configuration)  
+[Requirements](#requirements)
+[Convert an audio to WAV](#convertWav)
+[Build instructions](#build)
+[Contributing](#contrib)
+
+<a name="configuration"/>
 ## Configuration
 
 1. In the `Consts.h` file insert the correct hostname, username and password
@@ -23,26 +31,29 @@ You might also need set to maximum allowed packed size in MariaDB / MySQL.
 To do so add `max_allowed_packet=64M` to `/etc/my.cnf` or
 `C:\Program Files\MariaDB <ver>\data`.
 
+<a name="requirements"/>
 ## Requirements
 * MariaDB / MySQL
 * Some WAV files
 * ffmpeg (optional)
 
+<a name="convertWav"/>
 ## Convert an audio to WAV
 `ffmpeg -i audiofile.ext -ar 8000 -ac 1 out.wav`
 
-## Build instructions (Debian)
-
+<a name="build"/>
+## Build instructions
+### Debian
 1. `git submodule update --init --recursive`
 1. `sudo apt install libmariadbclient-dev`
 1. `sudo apt install libfftw3-dev`
 
-## Build instructions (MSys2)
-
+### Windows (MSys2)
 1. `git submodule update --init --recursive`
 1. `pacman -S mingw-w64-x86_64-libmariadbclient`
 1. `pacman -S mingw-w64-x86_64-fftw`
 
+<a name="contrib"/>
 ## Contributing
 Since C++ is a bit new to me there might be some errors or incorrectness
 in the code: feel free to make a pull request, open a issue or contact
