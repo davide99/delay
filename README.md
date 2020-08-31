@@ -2,7 +2,7 @@
 Library for recognizing songs using short noisy recordings. It is designed to be 
 fast without sacrificing code readability.
 
-The average time spent analyzing a song of 3 min is 2.1 s on a i5-6200U with
+The average time spent analyzing a song of 3 min is 1.9s on a i5-6200U with
 release optimizations turned on.
 
 The algorithm is discussed in the [algorithm.pdf](algorithm.pdf) file.
@@ -42,3 +42,8 @@ To do so add `max_allowed_packet=64M` to `/etc/my.cnf` or
 1. `git submodule update --init --recursive`
 1. `pacman -S mingw-w64-x86_64-libmariadbclient`
 1. `pacman -S mingw-w64-x86_64-fftw`
+
+## Contributing
+Since C++ is a bit new to me there might be some errors or incorrectness
+in the code: feel free to make a pull request, open a issue or contact
+me :)
