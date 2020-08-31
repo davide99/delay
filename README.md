@@ -1,4 +1,4 @@
-# Music recognition system in C++17
+# 🎶 Music recognition system in C++17
 Library for recognizing songs using short noisy recordings. It is designed to be 
 fast without sacrificing code readability.
 
@@ -61,4 +61,4 @@ To do so add `max_allowed_packet=64M` to `/etc/my.cnf` or
 
 Since C++ is a bit new to me there might be some errors or incorrectness
 in the code: feel free to make a pull request, open a issue or contact
-me :)
+me 😁
