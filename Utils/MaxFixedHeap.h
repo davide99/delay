@@ -1,5 +1,5 @@
-#ifndef UTILS_SRUCTURES_MAXFIXEDHEAP_H
-#define UTILS_SRUCTURES_MAXFIXEDHEAP_H
+#ifndef UTILS_MAXFIXEDHEAP_H
+#define UTILS_MAXFIXEDHEAP_H
 
 //https://github.com/jimbozhang/fixed-size-priority-queue/blob/master/fixed-size-priority-queue.h
 
@@ -39,17 +39,6 @@ namespace Utils {
                 this->c.push_back(x);
                 std::make_heap(this->c.begin(), this->c.end(), this->cmp);
             }
-        }
-
-        void pop() {
-            if (this->c.empty())
-                return;
-            std::pop_heap(this->c.begin(), this->c.end(), this->cmp);
-            this->c.pop_back();
-        }
-
-        inline const T &top() const {
-            return c.front();
         }
 
         void clear() {

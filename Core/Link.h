@@ -5,10 +5,13 @@
 #include "Peak.h"
 
 namespace Core {
+    /**
+     * Class to hold a link information
+     */
     class Link {
     private:
         std::uint64_t hash;
-        std::size_t time;
+        std::size_t window;
     public:
         Link(const Peak &address, const Peak &peak);
 

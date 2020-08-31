@@ -7,7 +7,7 @@
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
     int currBand, nextBand;
     std::vector<Peak> peakVec; //vector to be returned
-    Utils::MaxFixedHeap<Peak, Consts::NPeaks> tmp; //to store the temporary loudest peaks
+    Utils::MaxFixedHeap<Peak, Consts::Fingerprint::NPeaks> tmp; //to store the temporary loudest peaks
 
     const auto &bands = Math::Window::getBands();
 
@@ -20,7 +20,7 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
         for (std::size_t i = 0; i < spectrogram.size(); i++) {
 
             //Every C, or at the end of the window, add tmp to peakVec then reset tmp
-            if (i % Consts::C == 0 || i == spectrogram.size() - 1) {
+            if (i % Consts::Fingerprint::C == 0 || i == spectrogram.size() - 1) {
                 peakVec.insert(peakVec.end(), tmp.begin(), tmp.end());
                 tmp.clear();
             }
@@ -32,6 +32,6 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
         }
     }
 
-    std::sort(peakVec.begin(), peakVec.end());
+    std::sort(peakVec.begin(), peakVec.end()); //Sort in descending order by loudness
     return peakVec;
 }

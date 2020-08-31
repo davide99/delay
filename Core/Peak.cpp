@@ -1,5 +1,4 @@
 #include "Peak.h"
-#include <algorithm>
 
 const int &Core::Peak::getFreqIndex() const {
     return this->freqIndex;

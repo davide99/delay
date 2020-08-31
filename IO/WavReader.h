@@ -8,6 +8,9 @@
 struct Chunk;
 
 namespace IO {
+    /**
+     * Class to read WAV files
+     */
     class WavReader {
 
     private:

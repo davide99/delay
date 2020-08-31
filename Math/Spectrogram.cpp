@@ -3,31 +3,36 @@
 #include "Vector.h"
 #include "Window.h"
 
-static constexpr std::uint16_t FFTOutSize = Consts::WinSize / 2 + 1;
+//The output length of a FFT for a x real-valued input array is x.length / 2 + 1
+static constexpr std::uint16_t FFTOutSize = Consts::Window::Size / 2 + 1;
 
 Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
-    //Calculation of the winFFT size
-    std::size_t winFFTsize = ((std::size_t) ((data.size() - Consts::WinSize) / Consts::StepSize)) * Consts::StepSize;
+    //Calculation of the winFFT size with integer roundup
+    std::size_t winFFTsize = ((std::size_t) ((data.size() - Consts::Window::Size) / Consts::Window::StepSize)) *
+                             Consts::Window::StepSize;
     this->fftWindows.reserve(winFFTsize);
 
     FFTWindow fftWindow;
-    float timeWindow[Consts::WinSize];
-    fftwf_complex fftOut[FFTOutSize];
+    float timeWindow[Consts::Window::Size]; //fft input
+    fftwf_complex fftOut[FFTOutSize];  //fft output
 
-    fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::WinSize, timeWindow, fftOut, FFTW_ESTIMATE);
+    fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::Window::Size, timeWindow, fftOut, FFTW_ESTIMATE);
 
-    for (std::size_t i = 0; i + Consts::WinSize < data.size(); i += Consts::StepSize) {
+    for (std::size_t i = 0; i + Consts::Window::Size < data.size(); i += Consts::Window::StepSize) {
         //Multiply the sliding window by the hamming window
-        Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::WinSize);
+        Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::Window::Size);
         fftwf_execute(p);
 
-        //The first bin in the FFT output is the DC component, get rid of it by starting at fftOut+1
+        /*
+         * The first bin in the FFT output is the DC component, get rid of it by starting at fftOut+1
+         * and save just the magnitude, not the complex number
+         */
         std::transform(fftOut + 1, fftOut + FFTOutSize, fftWindow.magnitudes.data(),
                        [](const fftwf_complex &i) -> float {
                            return std::sqrt(i[0] * i[0] + i[1] * i[1]);
                        });
 
-        fftWindow.time = (float) i / Consts::SampleRate;
+        fftWindow.time = (float) i / Consts::Audio::SampleRate;
         this->fftWindows.push_back(fftWindow);
     }
 

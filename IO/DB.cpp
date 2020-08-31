@@ -13,6 +13,7 @@ IO::DB::DB() {
     //Create connection
     this->conn = mariadb::connection::create(acc);
 
+    //Create the database if it doesn't exist
     if (!exists())
         create();
 
@@ -72,12 +73,12 @@ bool IO::DB::drop() {
 }
 
 bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
-    //Insert song details into musicinfo table and get its PK
     mariadb::u64 id;
 
+    //Insert song details into InfoTable
     try {
         this->insSongInfoStmt->set_string(0, name);
-        id = this->insSongInfoStmt->insert();
+        id = this->insSongInfoStmt->insert(); //PK, id of the song
     } catch (const std::exception &e) {
         e.what();
         return false;
@@ -88,7 +89,7 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
 
     for (const auto &link : links) {
         s += "(";
-        s += Math::Integers::toHex(link.getHash());
+        s += Math::Integers::toHex(link.getHash()); //hex for speed purposes
         s += ",";
         s += Math::Integers::toHex(id);
         s += ",";
@@ -124,8 +125,8 @@ std::string IO::DB::getSongNameById(const std::uint64_t &id) {
         return "";
 }
 
-bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
-    //Create the temporary table
+bool IO::DB::searchIdGivenLinks(const Core::Links &links, std::uint64_t &id, std::uint64_t *commonLinks) {
+    //Create the temporary in memory table
     try {
         this->conn->execute("CREATE TEMPORARY TABLE " + Consts::DB::TmpRecordTableFull + " (" +
                             "hash " + Consts::DB::UInt64 + " NOT NULL, " +
@@ -162,20 +163,30 @@ bool IO::DB::searchIdGivenLinks(std::uint64_t &id, const Core::Links &links) {
 
     try {
         result = this->conn->query(
+                //selected songId, number of common links
                 "SELECT " + Consts::DB::RecordingsTableFull + ".songId, COUNT(*) AS n " +
+                //inner join the songs table and the temporary table
                 "FROM " + Consts::DB::RecordingsTableFull + " INNER JOIN " + Consts::DB::TmpRecordTableFull + " " +
+                //join condition: the hash has to be the same
                 "ON " + Consts::DB::RecordingsTableFull + ".hash=" + Consts::DB::TmpRecordTableFull + ".hash " +
+                //since the recording is a piece of the full song, so the whole recording has to be shifted of a non
+                //negative amount of time w.r.t. to original song
                 "WHERE " + Consts::DB::RecordingsTableFull + ".time>=" + Consts::DB::TmpRecordTableFull + ".start " +
+                //the common links are grouped if the time difference between the original song links and the recording
+                //ones is the same
                 "GROUP BY " + Consts::DB::RecordingsTableFull + ".time-" + Consts::DB::TmpRecordTableFull +
                 ".start, songId " +
+                //the more links in common the better
                 "ORDER BY n DESC");
 
-        if (result->next() && result->get_unsigned64(1) > Consts::DB::MinHint)
+        //found something && is it above the minimum threshold
+        if (result->next() && result->get_unsigned64(1) > Consts::Links::MinHint)
             id = result->get_unsigned32(0);
 
-#ifdef DEBUG
-        std::cout << ">>Number of common hashes: " << result->get_unsigned64(1) << std::endl;
-#endif
+        //should we return the number of common links?
+        if (commonLinks != nullptr)
+            *commonLinks = result->get_unsigned64(1);
+
     } catch (const std::exception &e) {
         e.what();
         return false;

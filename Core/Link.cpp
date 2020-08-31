@@ -22,7 +22,7 @@ Core::Link::Link(const Peak &address, const Peak &peak) {
     XXH3_64bits_update(&state, &addrFreq, sizeof(addrFreq));
 
     this->hash = XXH3_64bits_digest(&state);
-    this->time = address.getWindow();
+    this->window = address.getWindow();
 }
 
 const std::size_t &Core::Link::getHash() const {
@@ -30,6 +30,6 @@ const std::size_t &Core::Link::getHash() const {
 }
 
 const std::size_t &Core::Link::getTime() const {
-    return this->time;
+    return this->window;
 }
 

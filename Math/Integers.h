@@ -15,6 +15,11 @@ namespace Math::Integers {
 
     std::int64_t BSwap(const std::int64_t &x);
 
+    /**
+     * Efficiently "converts" a uint64 to a string_view
+     * @param x uint to convert
+     * @return the converted number wrapped in a string_view
+     */
     std::string_view toHex(std::uint64_t x);
 }
 

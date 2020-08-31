@@ -6,32 +6,41 @@
 #include <array>
 
 namespace Consts {
-    constexpr std::uint16_t Channels = 1u;
-    constexpr std::uint32_t SampleRate = 8000u;
-    constexpr std::uint16_t BitsPerSample = 16u;
-
-    constexpr std::uint16_t WinSize = 512u;
-    constexpr std::uint16_t Overlap = 256u;
-    constexpr std::uint16_t StepSize = WinSize - Overlap;
-    constexpr std::uint16_t FreqBins = WinSize / 2;
+    namespace Audio {
+        constexpr std::uint16_t Channels = 1u;
+        constexpr std::uint32_t SampleRate = 8000u;
+        constexpr std::uint16_t BitsPerSample = 16u;
+    }
 
     namespace Window {
+        constexpr std::uint16_t Size = 512u;
+        constexpr std::uint16_t Overlap = 256u;
+        constexpr std::uint16_t StepSize = Size - Overlap;
+        constexpr std::uint16_t FreqBins = Size / 2;
+
         constexpr std::uint16_t MelStart = 250u;
         constexpr std::uint16_t MelStep = 200u;
 
-        constexpr float FreqBinStep = ((float) SampleRate) / WinSize;
+        constexpr float FreqBinStep = ((float) Audio::SampleRate) / Size;
     }
 
-    constexpr std::uint8_t C = 32u;
-    constexpr std::uint8_t NPeaks = 3u;
-    constexpr std::uint8_t PeakRange = 5u;
-    constexpr std::uint16_t MinFreq = 100u;
-    constexpr std::uint16_t MaxFreq = 2000u;
+    namespace Fingerprint {
+        constexpr std::uint8_t C = 32u;
+        constexpr std::uint8_t NPeaks = 3u;
+        constexpr std::uint8_t PeakRange = 5u;
+        constexpr std::uint16_t MinFreq = 100u;
+        constexpr std::uint16_t MaxFreq = 2000u;
+    }
 
-    constexpr float MinWinDistanceF = 1.0f;
-    constexpr float MaxWinDistanceF = 3.0f;
+    namespace Links {
+        constexpr float MinWinDistanceF = 1.0f;
+        constexpr float MaxWinDistanceF = 3.0f;
+
+        constexpr std::uint64_t MinHint = 15;
+    }
 
     namespace DB {
+        //Credentials
         const std::string Hostname = "localhost";
         const std::string Username = "root";
         const std::string Password = "davide";
@@ -49,8 +58,6 @@ namespace Consts {
         //Table fields
         const std::string UInt64 = "BIGINT UNSIGNED";
         const std::string UInt = "INT UNSIGNED";
-
-        constexpr std::uint64_t MinHint = 15;
     }
 }
 
