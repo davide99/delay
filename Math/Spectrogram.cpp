@@ -20,7 +20,7 @@ Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
 
     for (std::size_t i = 0; i + Consts::Window::Size < data.size(); i += Consts::Window::StepSize) {
         //Multiply the sliding window by the hamming window
-        Math::Vector::mul(Window::get().data(), data.data() + i, timeWindow, Consts::Window::Size);
+        Math::Vector::mul(Window::window.data(), data.data() + i, timeWindow, Consts::Window::Size);
         fftwf_execute(p);
 
         /*

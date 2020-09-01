@@ -9,12 +9,10 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
     std::vector<Peak> peakVec; //vector to be returned
     Utils::FixedSizePQ<Peak, Consts::Fingerprint::NPeaks> tmp; //to store the temporary loudest peaks
 
-    const auto &bands = Math::Window::getBands();
-
     //For each band
-    for (std::size_t b = 0; b < bands.size() - 1; b++) {
-        currBand = bands[b];
-        nextBand = bands[b + 1];
+    for (std::size_t b = 0; b < Math::Window::bands.size() - 1; b++) {
+        currBand = Math::Window::bands[b];
+        nextBand = Math::Window::bands[b + 1];
 
         //For each window in the spectrogram
         for (std::size_t i = 0; i < spectrogram.size(); i++) {

@@ -1,65 +1,75 @@
 #include "Window.h"
 #include <cmath>
 
-const std::array<float, Consts::Window::Size> &Math::Window::get() {
-    if (!Math::Window::winInitialized) {
-        for (int i = 0; i < Consts::Window::Size; i++)
-            window[i] = (float) (0.5f * (1 - std::cos(2 * M_PI * i / (Consts::Window::Size - 1)))); //Hanning
+static std::array<float, Consts::Window::Size> makeWindow() noexcept {
+    std::array<float, Consts::Window::Size> tmp{};
 
-        Math::Window::winInitialized = true;
-    }
+    for (int i = 0; i < Consts::Window::Size; i++)
+        tmp[i] = (float) (0.5f * (1 - std::cos(2 * M_PI * i / (Consts::Window::Size - 1)))); //Hanning
 
-    return Math::Window::window;
+    return tmp;
 }
 
-const std::array<float, Consts::Window::FreqBins> &Math::Window::getFreqBins() {
-    if (!Math::Window::binsInitialized) {
-        for (int i = 0; i < Consts::Window::FreqBins; i++)
-            freqBins[i] = (Consts::Audio::SampleRate / 2.0f) * ((float) i / Consts::Window::FreqBins);
+const std::array<float, Consts::Window::Size> Math::Window::window = makeWindow();
 
-        Math::Window::binsInitialized = true;
-    }
+//----------------------------------------------------------------------
 
-    return Math::Window::freqBins;
+static std::array<float, Consts::Window::FreqBins> makeFreqBins() noexcept {
+    std::array<float, Consts::Window::FreqBins> tmp{};
+
+    for (int i = 0; i < Consts::Window::FreqBins; i++)
+        tmp[i] = (Consts::Audio::SampleRate / 2.0f) * ((float) i / Consts::Window::FreqBins);
+
+
+    return tmp;
 }
 
-const std::vector<int> &Math::Window::getBands() {
-    if (!Math::Window::melBandsInitialized) {
-        int freqIndex;
-        float factor = 700.0f / Consts::Window::FreqBinStep;
+const std::array<float, Consts::Window::FreqBins> Math::Window::freqBins = makeFreqBins();
 
-        for (auto mel = Consts::Window::MelStart;; mel += Consts::Window::MelStep) {
-            freqIndex = (int) std::round(factor * (std::pow(10.0f, (float) mel / 2595.0f) - 1.0f));
+//----------------------------------------------------------------------
 
-            if (freqIndex > Consts::Window::FreqBins)
-                break;
-            else
-                bands.push_back(freqIndex);
+static std::vector<int> makeBands() noexcept {
+    std::vector<int> tmp{};
+
+    int freqIndex;
+    float factor = 700.0f / Consts::Window::FreqBinStep;
+
+    for (auto mel = Consts::Window::MelStart;; mel += Consts::Window::MelStep) {
+        freqIndex = (int) std::round(factor * (std::pow(10.0f, (float) mel / 2595.0f) - 1.0f));
+
+        if (freqIndex > Consts::Window::FreqBins)
+            break;
+        else
+            tmp.push_back(freqIndex);
+    }
+
+    return tmp;
+}
+
+const std::vector<int> Math::Window::bands = makeBands();
+
+//----------------------------------------------------------------------
+
+static std::array<int, Consts::Window::FreqBins> makeBandsMap() noexcept {
+    std::array<int, Consts::Window::FreqBins> tmp{};
+
+    auto it = Math::Window::bands.begin();
+    int bandIndex = 0;
+
+    for (int i = 0; i < Consts::Window::FreqBins; i++) {
+        if (i >= *it && it != Math::Window::bands.end()) { //next band?
+            it++;
+            bandIndex++;
         }
 
-        Math::Window::melBandsInitialized = true;
+        tmp[i] = bandIndex;
     }
 
-    return Math::Window::bands;
+    return tmp;
 }
+
+const std::array<int, Consts::Window::FreqBins> Math::Window::bandsMap = makeBandsMap();
 
 const int &Math::Window::getBandIndex(const int &freqIndex) {
-    if (!Math::Window::bandsMapInitialized) {
-        const auto &bandsVec = getBands();
-        auto it = bandsVec.begin();
-        int bandIndex = 0;
-
-        for (int i = 0; i < Consts::Window::FreqBins; i++) {
-            if (i >= *it && it != bandsVec.end()) { //next band?
-                it++;
-                bandIndex++;
-            }
-
-            bandsMap[i] = bandIndex;
-        }
-
-        Math::Window::bandsMapInitialized = true;
-    }
-
-    return Math::Window::bandsMap[freqIndex];
+    return bandsMap[freqIndex];
 }

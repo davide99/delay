@@ -15,7 +15,7 @@ add_executable(fin_cpp
         Consts.h
         Math/Integers.cpp Math/Integers.h
         Utils/FixedSizePQ.h
-        Math/Window.cpp Math/Window.h
+        Math/Window.h Math/Window.cpp
         Math/Vector.h
         Math/Spectrogram.cpp Math/Spectrogram.h
         Core/Fingerprint.cpp Core/Fingerprint.h

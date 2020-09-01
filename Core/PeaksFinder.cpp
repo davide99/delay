@@ -8,7 +8,7 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const in
     bool ok;
 
     for (int i = bandStart; i <= bandEnd; i++) {
-        freqCurrent = Math::Window::getFreqBins()[i];
+        freqCurrent = Math::Window::freqBins[i];
 
         //The peak freq must be between the two boundaries
         if ((freqCurrent < Consts::Fingerprint::MinFreq) || (freqCurrent > Consts::Fingerprint::MaxFreq))
