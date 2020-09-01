@@ -14,7 +14,7 @@ add_executable(fin_cpp
         Utils/Utils.cpp Utils/Utils.h
         Consts.h
         Math/Integers.cpp Math/Integers.h
-        Utils/MaxFixedHeap.h
+        Utils/FixedSizePQ.h
         Math/Window.cpp Math/Window.h
         Math/Vector.h
         Math/Spectrogram.cpp Math/Spectrogram.h

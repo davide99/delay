@@ -1,13 +1,13 @@
 #include "Fingerprint.h"
-#include "../Utils/MaxFixedHeap.h"
+#include "../Utils/FixedSizePQ.h"
 #include "PeaksFinder.h"
-#include "../Math/Window.h"
 #include <cstdint>
+#include <algorithm>
 
 std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spectrogram) {
     int currBand, nextBand;
     std::vector<Peak> peakVec; //vector to be returned
-    Utils::MaxFixedHeap<Peak, Consts::Fingerprint::NPeaks> tmp; //to store the temporary loudest peaks
+    Utils::FixedSizePQ<Peak, Consts::Fingerprint::NPeaks> tmp; //to store the temporary loudest peaks
 
     const auto &bands = Math::Window::getBands();
 
@@ -26,9 +26,9 @@ std::vector<Core::Peak> Core::Fingerprint::compute(const Math::Spectrogram &spec
             }
 
             //Actually find the peaks between the two bands
-            std::vector<Peak> foundPeaks = findPeaks(spectrogram[i], i, currBand, nextBand - 1);
+            auto foundPeaks = findPeaks(spectrogram[i], i, currBand, nextBand - 1);
             for (const auto &peak : foundPeaks) //Copy the found peaks in the tmp peaks holder
-                tmp.push(peak);
+                tmp.insert(peak);
         }
     }
 

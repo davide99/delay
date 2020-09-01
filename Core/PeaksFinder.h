@@ -2,6 +2,7 @@
 #define CORE_PEAKSFINDER_H
 
 #include "../Math/FFTWindow.h"
+#include "../Utils/FixedSizePQ.h"
 #include "Peak.h"
 #include <vector>
 #include <cstdint>
@@ -15,7 +16,7 @@ namespace Core {
      * @param bandEnd   Upper boundary included
      * @return The found peaks
      */
-    std::vector<Core::Peak>
+    Utils::FixedSizePQ<Peak, Consts::Fingerprint::NPeaks>
     findPeaks(const Math::FFTWindow &fftWindow, const std::size_t &window, const int &bandStart, const int &bandEnd);
 }
 

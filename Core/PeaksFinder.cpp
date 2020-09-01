@@ -1,10 +1,8 @@
 #include "PeaksFinder.h"
-#include "../Utils/MaxFixedHeap.h"
 
-std::vector<Core::Peak>
-Core::findPeaks(const Math::FFTWindow &fftWindow, const std::size_t &window, const int &bandStart, const int &bandEnd) {
-
-    Utils::MaxFixedHeap<Peak, Consts::Fingerprint::NPeaks> peaks;
+Utils::FixedSizePQ<Core::Peak, Consts::Fingerprint::NPeaks>
+Core::findPeaks(const Math::FFTWindow &fftWindow, const size_t &window, const int &bandStart, const int &bandEnd) {
+    Utils::FixedSizePQ<Peak, Consts::Fingerprint::NPeaks> peaks;
     float magCurrent, freqCurrent;
     int indexLeft, indexRight, j;
     bool ok;
@@ -40,8 +38,8 @@ Core::findPeaks(const Math::FFTWindow &fftWindow, const std::size_t &window, con
             continue;
         }
 
-        peaks.push(Peak(i, magCurrent, window, fftWindow.getTime()));
+        peaks.insert(Peak(i, magCurrent, window, fftWindow.getTime()));
     }
 
-    return peaks.data();
+    return peaks;
 }

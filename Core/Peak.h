@@ -40,9 +40,16 @@ namespace Core {
         /**
          * Operator to decreasingly sort peaks by power
          * @param peak Other peak
-         * @return true if this < other, false otherwise
+         * @return true if this.power < other.power, false otherwise
          */
         bool operator<(const Peak &peak) const;
+
+        /**
+         * Operator to decreasingly sort peaks by power
+         * @param peak Other peak
+         * @return true if this.power > other.power, false otherwise
+         */
+        bool operator>(const Peak &peak) const;
 
     };
 }
