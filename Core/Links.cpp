@@ -16,6 +16,6 @@ Core::Links::Links(const std::vector<Peak> &peakVec) {
 
         for (; left <= right; left++)
             if (std::abs(left->getTime() - it->getTime()) >= Consts::Links::MinWinDistanceF && left->sameBand(*it))
-                this->push_back(Link(*it, *left));
+                this->emplace_back(*it, *left);
     }
 }
