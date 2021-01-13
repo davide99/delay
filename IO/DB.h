@@ -1,8 +1,8 @@
 #ifndef IO_DB_H
 #define IO_DB_H
 
-#include <mariadb++/connection.hpp>
-#include <mariadb++/statement.hpp>
+#include <SQLiteCpp/Database.h>
+#include <SQLiteCpp/Statement.h>
 #include <cstdint>
 #include "../Core/Links.h"
 
@@ -12,13 +12,10 @@ namespace IO {
      */
     class DB {
     private:
-        mariadb::connection_ref conn;
+        SQLite::Database db;
 
-        mariadb::statement_ref insSongInfoStmt, selSongById;
     public:
         DB();
-
-        ~DB();
 
         /**
          * @return true if the database exists, false otherwise
@@ -53,13 +50,6 @@ namespace IO {
          * @return true if a match is found, false otherwise
          */
         bool searchIdGivenLinks(const Core::Links &links, std::uint64_t &id, std::uint64_t *commonLinks = nullptr);
-
-        /**
-         * Find the name of a song
-         * @param id Id of the song
-         * @return The name if found, an empty string otherwise
-         */
-        std::string getSongNameById(const std::uint64_t &id);
     };
 }
 

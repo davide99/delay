@@ -41,23 +41,11 @@ namespace Consts {
 
     namespace DB {
         //Credentials
-        const std::string Hostname = "localhost";
-        const std::string Username = "root";
-        const std::string Password = "davide";
-        const std::string Name = "musiclibrary";
+        const std::string Name = "db";
 
         //Table names
         const std::string RecordingsTable = "recordings";
-        const std::string InfoTable = "musicinfo";
         const std::string TmpRecordTable = "_recording";
-
-        const std::string RecordingsTableFull = Name + "." + RecordingsTable;
-        const std::string InfoTableFull = Name + "." + InfoTable;
-        const std::string TmpRecordTableFull = Name + "." + TmpRecordTable;
-
-        //Table fields
-        const std::string UInt64 = "BIGINT UNSIGNED";
-        const std::string UInt = "INT UNSIGNED";
     }
 }
 
