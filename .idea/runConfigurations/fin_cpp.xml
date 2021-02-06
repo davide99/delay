@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fin_cpp" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-i $USER_HOME$/Scrivania/wav" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="fin_cpp" TARGET_NAME="fin_cpp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="fin_cpp" RUN_TARGET_NAME="fin_cpp">
+  <configuration default="false" name="fin_cpp" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="\\10.10.0.190\hd1tb\eng_ita.wav \\10.10.0.190\hd1tb\eng.wav" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="fin_cpp" TARGET_NAME="fin_cpp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="fin_cpp" RUN_TARGET_NAME="fin_cpp">
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
     </method>

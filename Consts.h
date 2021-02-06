@@ -40,12 +40,8 @@ namespace Consts {
     }
 
     namespace DB {
-        //Credentials
-        const std::string Name = "db";
-
         //Table names
-        const std::string RecordingsTable = "recordings";
-        const std::string TmpRecordTable = "_recording";
+        const std::string TracksTable = "tracks";
     }
 }
 

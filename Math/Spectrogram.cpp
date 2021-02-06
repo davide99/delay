@@ -7,11 +7,6 @@
 static constexpr std::uint16_t FFTOutSize = Consts::Window::Size / 2 + 1;
 
 Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
-    //Calculation of the winFFT size with integer roundup
-    std::size_t winFFTsize = ((std::size_t) ((data.size() - Consts::Window::Size) / Consts::Window::StepSize)) *
-                             Consts::Window::StepSize;
-    this->fftWindows.reserve(winFFTsize);
-
     FFTWindow fftWindow;
     float timeWindow[Consts::Window::Size]; //fft input
     fftwf_complex fftOut[FFTOutSize];  //fft output

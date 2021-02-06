@@ -18,29 +18,12 @@ namespace IO {
         DB();
 
         /**
-         * @return true if the database exists, false otherwise
-         */
-        bool exists();
-
-        /**
-         * Create the database
-         * @return true if no errors occurred, false otherwise
-         */
-        bool create();
-
-        /**
-         * Drop the database
-         * @return true if no errors occurred, false otherwise
-         */
-        bool drop();
-
-        /**
          * Insert a song in the database
-         * @param name  Name of the song
+         * @param id  Name of the song
          * @param links Song's links
          * @return true if no errors occurred, false otherwise
          */
-        bool insertSong(const std::string &name, const Core::Links &links);
+        bool insertTrack(const unsigned int &id, const Core::Links &links);
 
         /**
          * Try to find a match for a recording
@@ -49,7 +32,14 @@ namespace IO {
          * @param commonLinks   Output: optional, pointer to common links found
          * @return true if a match is found, false otherwise
          */
-        bool searchIdGivenLinks(const Core::Links &links, std::uint64_t &id, std::uint64_t *commonLinks = nullptr);
+        std::int64_t findDelay();
+
+    private:
+        /**
+         * Create the database
+         * @return true if no errors occurred, false otherwise
+         */
+        bool create();
     };
 }
 

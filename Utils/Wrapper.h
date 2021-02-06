@@ -6,6 +6,7 @@
 #include "../IO/WavReader.h"
 #include "../Math/Spectrogram.h"
 #include "../Core/Fingerprint.h"
+#include "../Consts.h"
 
 /*
  * Just a wrapper around the two main functions
@@ -16,13 +17,13 @@ namespace Utils {
      * @param fileName of the song
      * @param db initialized db object
      */
-    void insertSong(const std::string &fileName, IO::DB &db) {
+    void insertTrack(const std::string &fileName, IO::DB &db, const unsigned int &id) {
         IO::WavReader wavReader(fileName);
         Math::Spectrogram spectrogram(wavReader.getData());
         std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
         Core::Links links = Core::Links(peaks);
 
-        db.insertSong(fileName, links);
+        db.insertTrack(id, links);
     }
 
     /**
@@ -31,17 +32,11 @@ namespace Utils {
      * @param db initialized db object
      * @return the name of the sonf if found, an empty string otherwise
      */
-    std::string search(const std::string &fileName, IO::DB &db) {
-        IO::WavReader wavMic(fileName);
-        Math::Spectrogram specMic(wavMic.getData());
-        std::vector<Core::Peak> peaksMic = Core::Fingerprint::compute(specMic);
-        Core::Links linksMic = Core::Links(peaksMic);
-
-        std::uint64_t id;
-        if (db.searchIdGivenLinks(linksMic, id))
-            return db.getSongNameById(id);
-        else
-            return "";
+    float findDelta(IO::DB &db) {
+        int64_t a = db.findDelay();
+        std::cout << "aa:"<< a <<std::endl;
+        float windowDuration = ((float)Consts::Window::Size) / (float)Consts::Audio::SampleRate;
+        return (float)db.findDelay() * windowDuration;
     }
 };
 

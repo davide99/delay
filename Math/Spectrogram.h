@@ -2,6 +2,7 @@
 #define MATH_SPECTROGRAM_H
 
 #include <vector>
+#include <queue>
 #include "../Consts.h"
 #include "FFTWindow.h"
 
@@ -19,7 +20,7 @@ namespace Math {
         explicit Spectrogram(const std::vector<float>& data);
 
     private:
-        std::vector<FFTWindow> fftWindows;
+        std::deque<FFTWindow> fftWindows;
     public:
         /**
          * Get a specific FFT window

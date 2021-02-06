@@ -1,37 +1,19 @@
 #include "DB.h"
 #include <string>
+#include <iostream>
 #include "../Math/Integers.h"
 
-IO::DB::DB() : db(Consts::DB::Name) {
-    this->db.exec("PRAGMA temp_store=MEMORY;");
-
-    //Create the database if it doesn't exist
-    if (!exists())
-        create();
-}
-
-bool IO::DB::exists() {
-    try {
-        SQLite::Statement query(this->db,
-                                "SELECT COUNT(*) FROM sqlite_master WHERE name=? OR name=?");
-        query.bind(1, Consts::DB::RecordingsTable);
-        query.bind(2, Consts::DB::TmpRecordTable);
-
-        if (query.executeStep())
-            return query.getColumns<int, 1>() == 2;
-    } catch (const std::exception &e) {}
-
-    return false;
+IO::DB::DB() : db(":memory:", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE) {
+    create();
 }
 
 bool IO::DB::create() {
     try {
-        this->db.exec("CREATE TABLE IF NOT EXISTS " + Consts::DB::RecordingsTable + " (" +
+        this->db.exec("CREATE TABLE " + Consts::DB::TracksTable + " (" +
                       "hash INT NOT NULL, " +
-                      "songId INT NOT NULL, " +
+                      "trackId INT NOT NULL, " +
                       "time INT NOT NULL, " +
-                      "PRIMARY KEY (hash, songId, time)");
-
+                      "PRIMARY KEY (hash, trackId, time))");
     } catch (const std::exception &e) {
         e.what();
         return false;
@@ -40,24 +22,9 @@ bool IO::DB::create() {
     return true;
 }
 
-bool IO::DB::drop() {
-    try {
-        this->db.exec("DROP TABLE '" + Consts::DB::RecordingsTable + "'");
-        this->db.exec("DROP TABLE '" + Consts::DB::TmpRecordTable + "'");
-    } catch (const std::exception &e) {
-        e.what();
-        return false;
-    }
-
-    return true;
-}
-
-bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
-    std::uint64_t id;
-    id = this->db.execAndGet("SELECT MAX(songId) FROM '" + Consts::DB::RecordingsTable + "'").getInt64() + 1;
-
+bool IO::DB::insertTrack(const unsigned int &id, const Core::Links &links) {
     //Insert Links
-    std::string s = "INSERT INTO " + Consts::DB::RecordingsTable + " (hash, songId, time) VALUES ";
+    std::string s = "INSERT INTO " + Consts::DB::TracksTable + " (hash, trackId, time) VALUES ";
 
     for (const auto &link : links) {
         s += "(";
@@ -81,66 +48,34 @@ bool IO::DB::insertSong(const std::string &name, const Core::Links &links) {
     return true;
 }
 
-bool IO::DB::searchIdGivenLinks(const Core::Links &links, std::uint64_t &id, std::uint64_t *commonLinks) {
-    //Create the temporary in memory table
-    try {
-        this->db.exec("CREATE TEMPORARY TABLE " + Consts::DB::TmpRecordTable + " (" +
-                      "hash INT NOT NULL, " +
-                      "start INT NOT NULL, " +
-                      "PRIMARY KEY (hash, start))");
-    } catch (const std::exception &e) {
-        e.what();
-        return false;
-    }
-
-    //Insert recording links in the temporary table
-    std::string s = "INSERT INTO " + Consts::DB::TmpRecordTable + " VALUES ";
-
-    for (const auto &link : links) {
-        s += "(";
-        s += Math::Integers::toHex(link.getHash());
-        s += ",";
-        s += Math::Integers::toHex(link.getTime());
-        s += "),";
-    }
-
-    s.pop_back(); //Remove last (useless) ","
-
-    try {
-        this->db.exec(s);
-    } catch (const std::exception &e) {
-        e.what();
-        return false;
-    }
-
+std::int64_t IO::DB::findDelay() {
     //Perform the real query to find similarities
     std::string query_s =
-            //selected songId, number of common links
-            "SELECT " + Consts::DB::RecordingsTable + ".songId, COUNT(*) AS n " +
+            //selected trackId, number of common links
+            "SELECT t1.trackId, COUNT(*) AS n, t1.time-t2.time "
             //inner join the songs table and the temporary table
-            "FROM " + Consts::DB::RecordingsTable + " INNER JOIN " + Consts::DB::TmpRecordTable + " " +
+            "FROM " + Consts::DB::TracksTable + " AS t1 INNER JOIN " + Consts::DB::TracksTable + " AS t2 "
             //join condition: the hash has to be the same
-            "ON " + Consts::DB::RecordingsTable + ".hash=" + Consts::DB::TmpRecordTable + ".hash " +
+            "ON t1.hash=t2.hash " +
+            //but different ids
+            "AND t1.trackId!=t2.trackId " +
             //since the recording is a piece of the full song, so the whole recording has to be shifted of a non
             //negative amount of time w.r.t. to original song
-            "WHERE " + Consts::DB::RecordingsTable + ".time>=" + Consts::DB::TmpRecordTable + ".start " +
+            "WHERE t1.time>=t2.time " +
             //the common links are grouped if the time difference between the original song links and the recording
             //ones is the same
-            "GROUP BY " + Consts::DB::RecordingsTable + ".time-" + Consts::DB::TmpRecordTable + ".start, songId " +
+            "GROUP BY t1.time-t2.time, t1.trackId " +
             //the more links in common the better
             "ORDER BY n DESC";
+
+    std::cout << query_s << std::endl;
 
     SQLite::Statement query(this->db, query_s);
 
     try {
-        if(query.executeStep()){
-            //found something && is it above the minimum threshold
-            if (query.getColumn(1).getInt64() > Consts::Links::MinHint)
-                id = query.getColumn(0).getInt();
-
-            //should we return the number of common links?
-            if (commonLinks != nullptr)
-                *commonLinks = query.getColumn(1).getInt64();
+        if (query.executeStep()) {
+            std::cout<<"common:"<<query.getColumn(1).getInt()<<std::endl;
+            return query.getColumn(2).getInt64();
         }
     } catch (const std::exception &e) {
         e.what();
