@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <cstdio>
+#include "GenericReader.h"
 
 struct Chunk;
 
@@ -11,20 +13,25 @@ namespace IO {
     /**
      * Class to read WAV files
      */
-    class WavReader {
+    class WavReader : public GenericReader {
 
     private:
-        std::string fileName;
         std::vector<float> data;
+        std::FILE *wavFile;
+        const bool isBigEndian;
+        std::size_t numberOfSamples;
 
     public:
         explicit WavReader(const std::string &fileName);
 
-        const std::vector<float> &getData();
+        ~WavReader();
+
+        [[nodiscard]] const float *ptrAt(const std::size_t &pos) const override;
+
+        [[nodiscard]] const std::size_t &getNumberOfSamples() const override;
 
     private:
-        static bool
-        findChunk(const uint8_t *id, Chunk &chunk, std::ifstream &wavFile, const bool &isBigEndian, bool iterate);
+        bool findChunk(const uint8_t *id, Chunk &chunk, const bool &iterate);
     };
 }
 

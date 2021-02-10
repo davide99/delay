@@ -5,6 +5,7 @@
 #include <queue>
 #include "../Consts.h"
 #include "FFTWindow.h"
+#include "../IO/GenericReader.h"
 
 namespace Math {
     /**
@@ -15,9 +16,9 @@ namespace Math {
     public:
         /**
          * Constructs the spectrogram
-         * @param data samples
+         * @param reader the reader
          */
-        explicit Spectrogram(const std::vector<float>& data);
+        explicit Spectrogram(const IO::GenericReader &reader);
 
     private:
         std::deque<FFTWindow> fftWindows;

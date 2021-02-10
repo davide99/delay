@@ -5,8 +5,6 @@
 #include <vector>
 
 namespace Utils {
-    bool fileExists(const std::string &fileName);
-
     bool isBigEndian();
 
     /**

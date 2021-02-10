@@ -6,16 +6,16 @@
 //The output length of a FFT for a x real-valued input array is x.length / 2 + 1
 static constexpr std::uint16_t FFTOutSize = Consts::Window::Size / 2 + 1;
 
-Math::Spectrogram::Spectrogram(const std::vector<float> &data) {
+Math::Spectrogram::Spectrogram(const IO::GenericReader &reader) {
     FFTWindow fftWindow;
     float timeWindow[Consts::Window::Size]; //fft input
     fftwf_complex fftOut[FFTOutSize];  //fft output
 
     fftwf_plan p = fftwf_plan_dft_r2c_1d(Consts::Window::Size, timeWindow, fftOut, FFTW_ESTIMATE);
 
-    for (std::size_t i = 0; i + Consts::Window::Size < data.size(); i += Consts::Window::StepSize) {
+    for (std::size_t i = 0; i + Consts::Window::Size < reader.getNumberOfSamples(); i += Consts::Window::StepSize) {
         //Multiply the sliding window by the hamming window
-        Math::Vector::mul(Window::window.data(), data.data() + i, timeWindow, Consts::Window::Size);
+        Math::Vector::mul(Window::window.data(), reader.ptrAt(i), timeWindow, Consts::Window::Size);
         fftwf_execute(p);
 
         /*

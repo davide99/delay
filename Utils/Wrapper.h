@@ -19,7 +19,7 @@ namespace Utils {
      */
     void insertTrack(const std::string &fileName, IO::DB &db, const unsigned int &id) {
         IO::WavReader wavReader(fileName);
-        Math::Spectrogram spectrogram(wavReader.getData());
+        Math::Spectrogram spectrogram(wavReader);
         std::vector<Core::Peak> peaks = Core::Fingerprint::compute(spectrogram);
         Core::Links links = Core::Links(peaks);
 
