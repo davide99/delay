@@ -25,7 +25,7 @@ add_executable(fin_cpp
         Core/Link.h Core/Link.cpp
         Core/Links.cpp Core/Links.h
         IO/DB.cpp IO/DB.h
-        Utils/Wrapper.h)
+        Utils/Wrapper.h Utils/Semaphore.h)
 
 target_link_libraries(fin_cpp fftw3f stdc++fs SQLiteCpp sqlite3)
 target_compile_definitions(fin_cpp PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
