@@ -151,6 +151,3 @@ const std::vector<float> &IO::WavReader::getData() {
     return this->data;
 }
 
-const std::string &IO::WavReader::getFileName() const {
-    return this->fileName;
-}

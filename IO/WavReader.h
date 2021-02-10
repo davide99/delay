@@ -15,11 +15,8 @@ namespace IO {
 
     private:
         std::string fileName;
-    public:
-        [[nodiscard]] const std::string &getFileName() const;
-
-    private:
         std::vector<float> data;
+
     public:
         explicit WavReader(const std::string &fileName);
 
