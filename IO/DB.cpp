@@ -1,6 +1,7 @@
 #include "DB.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 #include "../Math/Integers.h"
 
 IO::DB::DB() : db(":memory:", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE) {
@@ -55,8 +56,8 @@ std::int64_t IO::DB::findDelay() {
             "SELECT t1.trackId, COUNT(*) AS n, t1.time-t2.time "
             //inner join the songs table and the temporary table
             "FROM " + Consts::DB::TracksTable + " AS t1 INNER JOIN " + Consts::DB::TracksTable + " AS t2 "
-            //join condition: the hash has to be the same
-            "ON t1.hash=t2.hash " +
+                                                                                                 //join condition: the hash has to be the same
+                                                                                                 "ON t1.hash=t2.hash " +
             //but different ids
             "AND t1.trackId!=t2.trackId " +
             //since the recording is a piece of the full song, so the whole recording has to be shifted of a non
@@ -74,7 +75,7 @@ std::int64_t IO::DB::findDelay() {
 
     try {
         if (query.executeStep()) {
-            std::cout<<"common:"<<query.getColumn(1).getInt()<<std::endl;
+            std::cout << "common:" << query.getColumn(1).getInt() << std::endl;
             return query.getColumn(2).getInt64();
         }
     } catch (const std::exception &e) {
@@ -83,4 +84,26 @@ std::int64_t IO::DB::findDelay() {
     }
 
     return true;
+}
+
+void IO::DB::saveCommonToCSV(const std::string &csvName, float windowDuration) {
+    std::ofstream csvFile(csvName);
+
+    std::string query_s =
+            "SELECT t1.time, t2.time "
+            "FROM " + Consts::DB::TracksTable + " AS t1 INNER JOIN " + Consts::DB::TracksTable + " AS t2 " +
+            "ON t1.hash=t2.hash AND t1.trackId=1 AND t2.trackId=2";
+
+    SQLite::Statement query(this->db, query_s);
+
+    try {
+        while (query.executeStep()) { //Row by row
+            csvFile << ((float) query.getColumn(0).getInt64()) * windowDuration << ","
+                    << ((float) query.getColumn(1).getInt64()) * windowDuration << "\n";
+        }
+    } catch (const std::exception &e) {
+        e.what();
+    }
+
+    csvFile.close();
 }

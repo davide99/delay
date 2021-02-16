@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
             std::chrono::high_resolution_clock::now() - start).count() / 2;
     std::cout << "Mean time for each track: " << duration << "ms" << std::endl;
 
-    auto delay = Utils::findDelta(db);
-    std::cout << delay << std::endl;
+    Utils::saveToCSV(db, "out.csv");
+    //std::cout << Utils::findDelta(db);
 
     return 0;
 }

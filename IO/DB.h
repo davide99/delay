@@ -34,6 +34,8 @@ namespace IO {
          */
         std::int64_t findDelay();
 
+        void saveCommonToCSV(const std::string &csvName, float windowDuration);
+
     private:
         /**
          * Create the database

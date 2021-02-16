@@ -34,9 +34,14 @@ namespace Utils {
      */
     float findDelta(IO::DB &db) {
         int64_t a = db.findDelay();
-        std::cout << "aa:"<< a <<std::endl;
-        float windowDuration = ((float)Consts::Window::Size) / (float)Consts::Audio::SampleRate;
-        return (float)db.findDelay() * windowDuration;
+        std::cout << "aa:" << a << std::endl;
+        float windowDuration = ((float) Consts::Window::Size) / (float) Consts::Audio::SampleRate;
+        return (float) db.findDelay() * windowDuration;
+    }
+
+    void saveToCSV(IO::DB &db, const std::string &fileName) {
+        float windowDuration = ((float) Consts::Window::StepSize) / ((float) Consts::Audio::SampleRate);
+        db.saveCommonToCSV(fileName, windowDuration);
     }
 };
 
